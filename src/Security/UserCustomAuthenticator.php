@@ -86,7 +86,6 @@ class UserCustomAuthenticator extends AbstractFormLoginAuthenticator
         }
 
         return new RedirectResponse($this->router->generate('default'));
-//        throw new \Exception('TODO: provide a valid redirect inside '.__FILE__);
     }
 
     protected function getLoginUrl()
