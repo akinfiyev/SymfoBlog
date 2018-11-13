@@ -20,7 +20,7 @@ class User implements UserInterface
 
     /**
      * @ORM\Column(type="string", length=180, unique=true)
-     * @Assert\NotNull()
+     * @Assert\NotBlank()
      * @Assert\Email()
      */
     private $email;
@@ -33,7 +33,7 @@ class User implements UserInterface
     /**
      * @var string The hashed password
      * @ORM\Column(type="string")
-     * @Assert\NotNull()
+     * @Assert\NotBlank()
      * @Assert\Length(
      *      min = 3,
      *      max = 50,
