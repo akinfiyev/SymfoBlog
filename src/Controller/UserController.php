@@ -3,19 +3,24 @@
 namespace App\Controller;
 
 use App\Entity\User;
+use App\Event\PasswordEnteringEvent;
+use App\EventListener\PasswordListener;
 use App\Form\User\UserRegisterPostType;
+use App\Services\UserService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\EventDispatcher\EventDispatcher;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 class UserController extends AbstractController
 {
-    private $passwordEncoder;
+    private $userService;
 
-    public function __construct(UserPasswordEncoderInterface $passwordEncoder)
+    public function __construct(UserService $userService)
     {
-        $this->passwordEncoder = $passwordEncoder;
+        $this->userService = $userService;
     }
 
     /**
@@ -29,15 +34,7 @@ class UserController extends AbstractController
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $user->setPassword($this->passwordEncoder->encodePassword(
-                $user,
-                $user->getPassword()
-            ));
-
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($user);
-            $em->flush();
-
+            $this->userService->save($user);
             return $this->redirectToRoute('default');
         }
 
