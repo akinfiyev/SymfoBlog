@@ -10,6 +10,7 @@ namespace App\Form\Article;
 
 use App\Entity\Article;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -24,7 +25,7 @@ class ArticlePostType extends AbstractType
                     'placeholder' => 'Title'],
                 'label_attr' => ['class' => 'sr-only'],
             ])
-            ->add('text', TextType::class, [
+            ->add('text', TextareaType::class, [
                 'attr' => ['class' => 'form-control',
                     'placeholder' => 'Article text'],
                 'label_attr' => ['class' => 'sr-only'],

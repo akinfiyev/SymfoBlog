@@ -16,13 +16,6 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 class UserController extends AbstractController
 {
-    private $userService;
-
-    public function __construct(UserService $userService)
-    {
-        $this->userService = $userService;
-    }
-
     /**
      * @Route("/register", name="register")
      */
@@ -34,7 +27,10 @@ class UserController extends AbstractController
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->userService->save($user);
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($user);
+            $em->flush();
+
             return $this->redirectToRoute('default');
         }
 

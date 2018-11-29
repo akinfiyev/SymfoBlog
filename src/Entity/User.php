@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Services\UserService;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -10,6 +11,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
  * @UniqueEntity("email")
+ * @ORM\EntityListeners({"App\EntityListener\UserListener"})
  */
 class User implements UserInterface
 {
@@ -35,6 +37,11 @@ class User implements UserInterface
     /**
      * @var string The hashed password
      * @ORM\Column(type="string")
+     */
+    private $password;
+
+    /**
+     * @var string Plain password
      * @Assert\NotBlank()
      * @Assert\Length(
      *      min = 3,
@@ -43,7 +50,7 @@ class User implements UserInterface
      *      maxMessage = "Your password cannot be longer than {{ limit }} characters"
      * )
      */
-    private $password;
+    private $plainPassword;
 
     public function getId(): ?int
     {
@@ -102,6 +109,18 @@ class User implements UserInterface
     public function setPassword(string $password): self
     {
         $this->password = $password;
+
+        return $this;
+    }
+
+    public function getPlainPassword(): ?string
+    {
+        return $this->plainPassword;
+    }
+
+    public function setPlainPassword(?string $plainPassword): self
+    {
+        $this->plainPassword = $plainPassword;
 
         return $this;
     }

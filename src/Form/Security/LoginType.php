@@ -8,7 +8,6 @@
 
 namespace App\Form\Security;
 
-
 use App\Entity\User;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
@@ -21,8 +20,16 @@ class LoginType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('email', TextType::class)
-            ->add('password', PasswordType::class);
+            ->add('email', TextType::class, [
+                'label_attr' => ['class' => 'sr-only'],
+                'attr' => ['placeholder' => 'E-mail',
+                    'class' => 'form-control']
+            ])
+            ->add('password', PasswordType::class, [
+                'label_attr' => ['class' => 'sr-only'],
+                'attr' => ['placeholder' => 'Password',
+                    'class' => 'form-control']
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver)

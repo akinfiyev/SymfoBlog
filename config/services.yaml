@@ -27,5 +27,12 @@ services:
         resource: '../src/Controller'
         tags: ['controller.service_arguments']
 
+    # allow inject services to UserListener
+    app.doctrine.listener.order:
+        class: App\EntityListener\UserListener
+        public: false
+        tags:
+            - { name: "doctrine.orm.entity_listener" }
+
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones

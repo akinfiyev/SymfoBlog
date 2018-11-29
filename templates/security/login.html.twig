@@ -3,7 +3,11 @@
 {% block title %}Log in!{% endblock %}
 
 {% block body %}
+    <h1 class="h3 mb-3 font-weight-normal">Login form</h1>
     {{ form_start(form) }}
+    {% if error %}
+        <div class="alert alert-danger">{{ error.message }}</div>
+    {% endif %}
     {{ form_widget(form) }}
     <button class="btn btn-lg btn-primary" type="submit">
         Sign in

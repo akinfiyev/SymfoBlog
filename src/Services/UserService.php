@@ -8,42 +8,34 @@
 
 namespace App\Services;
 
-
 use App\Entity\User;
 use App\Event\PasswordEnteringEvent;
 use App\EventListener\PasswordListener;
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\ORM\EntityManager;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\Security\Core\Encoder\PasswordEncoderInterface;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 class UserService
 {
-    private $dispatcher;
-    private $doctrine;
-    private $listener;
+    private $encoder;
 
     /**
      * UserService constructor.
      */
-    public function __construct(EventDispatcherInterface $dispatcher, ManagerRegistry $doctrine, PasswordListener $listener)
+    public function __construct(UserPasswordEncoderInterface $encoder)
     {
-        $this->dispatcher = $dispatcher;
-        $this->doctrine = $doctrine;
-        $this->listener = $listener;
+        $this->encoder = $encoder;
     }
 
-    public function save(User $user) {
-        $event = new PasswordEnteringEvent($user);
-        $this->dispatcher
-            ->addListener(
-                PasswordEnteringEvent::NAME,
-                [$this->listener, 'onPasswordEnteringEvent']);
+    public function encodePassword(User $user)
+    {
+        $plainPassword = $user->getPlainPassword();
 
-        $encodePassword = $this->dispatcher->dispatch(PasswordEnteringEvent::NAME, $event)->getUser()->getPassword();
-        $user->setPassword($encodePassword);
-
-        $this->doctrine->getManager()->persist($user);
-        $this->doctrine->getManager()->flush();
-        return $this;
+        if (!empty($plainPassword)) {
+            return $this->encoder->encodePassword($user, $plainPassword);
+        }
+        return $plainPassword;
     }
 }

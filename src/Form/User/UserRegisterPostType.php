@@ -26,7 +26,7 @@ class UserRegisterPostType extends AbstractType
                     'placeholder' => 'Email'],
                 'label_attr' => ['class' => 'sr-only'],
             ])
-            ->add('password', RepeatedType::class, [
+            ->add('plainPassword', RepeatedType::class, [
                 'type' => PasswordType::class,
                 'invalid_message' => 'The password fields must match.',
                 'required' => true,

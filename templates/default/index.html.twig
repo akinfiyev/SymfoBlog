@@ -5,6 +5,7 @@
     <title>{% block title %}Welcome!{% endblock %}</title>
     {% block stylesheets %}
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+        <link href="{{ asset('css/blog.css') }}" rel="stylesheet" />
     {% endblock %}
 </head>
 <body>
@@ -16,16 +17,16 @@
         <ul class="nav navbar-nav">
             <li><a href="/">Home</a></li>
             {% if is_granted('IS_AUTHENTICATED_FULLY') %}
-                <li><a href="/logout">Logout</a></li>
+                <li><a href="{{ path('app_logout') }}">Logout</a></li>
             {% else %}
-                <li><a href="/login">Login</a></li>
-                <li><a href="/register">Registration</a></li>
+                <li><a href="{{ path('app_login') }}">Login</a></li>
+                <li><a href="{{ path('register') }}">Registration</a></li>
             {% endif %}
-            <li><a href="/article">Articles</a></li>
+            <li><a href="{{ path('article') }}">Articles</a></li>
             {% if is_granted(expression(
                 '"ROLE_BLOGGER" in roles'
                 )) %}
-                <li><a href="/article/post">Add article</a></li>
+                <li><a href="{{ path('post_article') }}">Add article</a></li>
             {% endif %}
         </ul>
     </div>
