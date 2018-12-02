@@ -3,16 +3,10 @@
 namespace App\Controller;
 
 use App\Entity\User;
-use App\Event\PasswordEnteringEvent;
-use App\EventListener\PasswordListener;
 use App\Form\User\UserRegisterPostType;
-use App\Services\UserService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\EventDispatcher\EventDispatcher;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 class UserController extends AbstractController
 {

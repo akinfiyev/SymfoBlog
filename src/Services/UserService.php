@@ -9,12 +9,6 @@
 namespace App\Services;
 
 use App\Entity\User;
-use App\Event\PasswordEnteringEvent;
-use App\EventListener\PasswordListener;
-use Doctrine\Common\Persistence\ManagerRegistry;
-use Doctrine\ORM\EntityManager;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
-use Symfony\Component\Security\Core\Encoder\PasswordEncoderInterface;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 class UserService

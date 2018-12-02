@@ -11,10 +11,7 @@ namespace App\EntityListener;
 use App\Entity\User;
 use App\Services\UserService;
 use Doctrine\ORM\Event\LifecycleEventArgs;
-use Doctrine\ORM\Event\PreUpdateEventArgs;
 use Doctrine\ORM\Mapping\PrePersist;
-use Doctrine\ORM\Mapping\PreUpdate;
-use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 class UserListener
 {
