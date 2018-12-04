@@ -6,6 +6,7 @@
     <div class="col-md-6 mx-auto">
         <h1 class="h3 mb-3 font-weight-normal">Registration form</h1>
         {{ form_start(form) }}
+        {{ form_widget(form.username) }}
         {{ form_errors(form.email) }}
         {{ form_widget(form.email) }}
         {{ form_widget(form.plainPassword) }}

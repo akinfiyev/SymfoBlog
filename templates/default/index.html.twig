@@ -13,7 +13,7 @@
 <body>
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <div class="container">
-        <a class="navbar-brand" href="#">Blog</a>
+        <a class="navbar-brand" href="{{ path('index') }}">SymfoBlog</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
                 aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -22,14 +22,13 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
 
             <ul class="navbar-nav mr-auto">
-                <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{ path('index') }}">Home</a></li>
                 {% if is_granted('IS_AUTHENTICATED_FULLY') %}
                     <li class="nav-item"><a class="nav-link" href="{{ path('app_logout') }}">Logout</a></li>
                 {% else %}
                     <li class="nav-item"><a class="nav-link" href="{{ path('app_login') }}">Login</a></li>
                     <li class="nav-item"><a class="nav-link" href="{{ path('register') }}">Registration</a></li>
                 {% endif %}
-                <li class="nav-item"><a class="nav-link" href="{{ path('article') }}">Articles</a></li>
                 {% if is_granted(expression(
                     '"ROLE_BLOGGER" in roles'
                     )) %}
