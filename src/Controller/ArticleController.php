@@ -28,7 +28,7 @@ class ArticleController extends AbstractController
         );
 
         return $this->render('article/index.html.twig', [
-            'articles'=>$articles
+            'articles' => $articles
         ]);
     }
 
@@ -43,7 +43,8 @@ class ArticleController extends AbstractController
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $article->setAuthor($this->getUser());
+            $article->setAuthor($this->getUser())
+                ->setCreatedAt(new \DateTime());
             $em = $this->getDoctrine()->getManager();
             $em->persist($article);
             $em->flush();

@@ -14,7 +14,7 @@
                     <a href="/post?id={{ article.id }}" class="btn btn-primary">Read More &rarr;</a>
                 </div>
                 <div class="card-footer text-muted">
-                    Posted on January 1, 2017 by {{ article.author.username }}
+                    Posted on {{ article.createdAt|date('F d, Y') }} by {{ article.author.username }}
                 </div>
             </div>
         {% endfor %}
