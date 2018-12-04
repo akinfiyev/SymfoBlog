@@ -31,6 +31,7 @@ class UserFixtures extends Fixture
             ->setRoles(['ROLE_ADMIN'])
             ->setPlainPassword('admin');
         $manager->persist($user_admin);
+
         $manager->flush();
     }
 }

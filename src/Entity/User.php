@@ -70,9 +70,15 @@ class User implements UserInterface
      */
     private $username;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\UserLike", mappedBy="user_id")
+     */
+    private $userLikes;
+
     public function __construct()
     {
         $this->articles = new ArrayCollection();
+        $this->userLikes = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -199,6 +205,37 @@ class User implements UserInterface
     public function setUsername(string $username): self
     {
         $this->username = $username;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|UserLike[]
+     */
+    public function getUserLikes(): Collection
+    {
+        return $this->userLikes;
+    }
+
+    public function addUserLike(UserLike $userLike): self
+    {
+        if (!$this->userLikes->contains($userLike)) {
+            $this->userLikes[] = $userLike;
+            $userLike->setUserId($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUserLike(UserLike $userLike): self
+    {
+        if ($this->userLikes->contains($userLike)) {
+            $this->userLikes->removeElement($userLike);
+            // set the owning side to null (unless already changed)
+            if ($userLike->getUserId() === $this) {
+                $userLike->setUserId(null);
+            }
+        }
 
         return $this;
     }

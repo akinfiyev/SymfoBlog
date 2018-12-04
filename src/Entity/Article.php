@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -22,7 +24,7 @@ class Article
      * @Assert\NotNull()
      * @Assert\Length(
      *      min = 5,
-     *      max = 10,
+     *      max = 25,
      *      minMessage = "Article title must be at least {{ limit }} characters long",
      *      maxMessage = "Article title cannot be longer than {{ limit }} characters"
      * )
@@ -34,7 +36,7 @@ class Article
      * @Assert\NotNull()
      * @Assert\Length(
      *      min = 10,
-     *      max = 50,
+     *      max = 255,
      *      minMessage = "Article text must be at least {{ limit }} characters long",
      *      maxMessage = "Article text cannot be longer than {{ limit }} characters"
      * )
@@ -52,6 +54,16 @@ class Article
      * @ORM\Column(type="datetime")
      */
     private $createdAt;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\UserLike", mappedBy="article_id")
+     */
+    private $articleLikes;
+
+    public function __construct()
+    {
+        $this->articleLikes = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -102,6 +114,37 @@ class Article
     public function setCreatedAt(\DateTimeInterface $createdAt): self
     {
         $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|UserLike[]
+     */
+    public function getArticleLikes(): Collection
+    {
+        return $this->articleLikes;
+    }
+
+    public function addArticleLike(UserLike $articleLike): self
+    {
+        if (!$this->articleLikes->contains($articleLike)) {
+            $this->articleLikes[] = $articleLike;
+            $articleLike->setArticleId($this);
+        }
+
+        return $this;
+    }
+
+    public function removeArticleLike(UserLike $articleLike): self
+    {
+        if ($this->articleLikes->contains($articleLike)) {
+            $this->articleLikes->removeElement($articleLike);
+            // set the owning side to null (unless already changed)
+            if ($articleLike->getArticleId() === $this) {
+                $articleLike->setArticleId(null);
+            }
+        }
 
         return $this;
     }
