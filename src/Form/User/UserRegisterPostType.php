@@ -21,6 +21,11 @@ class UserRegisterPostType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
+            ->add('username', TextType::class, [
+                'attr' => ['class' => 'form-control',
+                    'placeholder' => 'Username'],
+                'label_attr' => ['class' => 'sr-only'],
+            ])
             ->add('email', TextType::class, [
                 'attr' => ['class' => 'form-control',
                     'placeholder' => 'Email'],
