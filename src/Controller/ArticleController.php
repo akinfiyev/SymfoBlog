@@ -12,7 +12,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class ArticleController extends AbstractController
 {
     /**
-     * @Route("/article", name="article")
+     * @Route("/", name="index")
      */
     public function indexAction(Request $request, ContainerInterface $container)
     {
@@ -33,7 +33,7 @@ class ArticleController extends AbstractController
     }
 
     /**
-     * @Route("/article/post", name="post_article")
+     * @Route("/post/new", name="post_article")
      */
     public function postAction(Request $request)
     {
@@ -43,11 +43,12 @@ class ArticleController extends AbstractController
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
+            $article->setAuthor($this->getUser());
             $em = $this->getDoctrine()->getManager();
             $em->persist($article);
             $em->flush();
 
-            return $this->redirectToRoute('default');
+            return $this->redirectToRoute('index');
         }
 
         return $this->render('article/post.html.twig', [
