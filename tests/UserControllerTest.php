@@ -14,6 +14,7 @@ class UserControllerTest extends WebTestCase
 
         $crawler->selectButton('Submit');
         $form = $crawler->selectButton('Register')->form();
+        $form['user_register_post[username]'] = time().'test';
         $form['user_register_post[email]'] = time().'test@gmail.com';
         $form['user_register_post[plainPassword][first]'] = '1234';
         $form['user_register_post[plainPassword][second]'] = '1234';
