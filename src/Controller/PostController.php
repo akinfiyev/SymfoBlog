@@ -51,6 +51,7 @@ class PostController extends AbstractController
                 'article' => $article,
                 'form' => $form->createView(),
                 'comments' => $comments,
+                'tags' => $article->getTags(),
             ]);
         } else {
             throw $this->createNotFoundException('The article does not exist.');
