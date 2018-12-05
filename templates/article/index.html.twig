@@ -17,7 +17,7 @@
                         Posted on {{ article.createdAt|date('F d, Y') }} by {{ article.author.username }}
                     </div>
                     <div class="col-md-2 text-right">
-                        <a class="btn btn-light btn-custom-primary" href="{{ path('like') }}?post_id={{ article.id }}"
+                        <a class="btn btn-light text-primary" href="{{ path('like') }}?post_id={{ article.id }}"
                            role="button">
                             {% if article.articleLikes|length > 0 %}
                                 {{ article.articleLikes|length }}
