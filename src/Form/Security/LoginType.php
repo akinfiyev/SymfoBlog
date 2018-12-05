@@ -22,7 +22,7 @@ class LoginType extends AbstractType
         $builder
             ->add('email', TextType::class, [
                 'label_attr' => ['class' => 'sr-only'],
-                'attr' => ['placeholder' => 'E-mail',
+                'attr' => ['placeholder' => 'E-mail or username',
                     'class' => 'form-control']
             ])
             ->add('password', PasswordType::class, [
