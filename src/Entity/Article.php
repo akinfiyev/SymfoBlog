@@ -72,6 +72,11 @@ class Article
 
     private $tagsInput;
 
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $isApproved;
+
     public function __construct()
     {
         $this->articleLikes = new ArrayCollection();
@@ -233,6 +238,18 @@ class Article
     public function setTagsInput(?string $tagsInput): self
     {
         $this->tagsInput = $tagsInput;
+
+        return $this;
+    }
+
+    public function getIsApproved(): ?bool
+    {
+        return $this->isApproved;
+    }
+
+    public function setIsApproved(bool $isApproved): self
+    {
+        $this->isApproved = $isApproved;
 
         return $this;
     }

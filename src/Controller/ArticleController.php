@@ -19,7 +19,7 @@ class ArticleController extends AbstractController
     {
         $articles = $this->getDoctrine()
             ->getRepository(Article::class)
-            ->findBy([], ['id' => 'DESC']);
+            ->findBy(['isApproved' => true], ['id' => 'DESC']);
 
         $paginator = $container->get('knp_paginator');
         $articles = $paginator->paginate(
