@@ -6,6 +6,7 @@ use App\Entity\Article;
 use App\Entity\Comment;
 use App\Form\Comment\AddCommentPostType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -14,7 +15,7 @@ class PostController extends AbstractController
     /**
      * @Route("/post", name="post")
      */
-    public function index(Request $request)
+    public function index(Request $request, ContainerInterface $container)
     {
         $em = $this->getDoctrine()->getManager();
         $id = $request->get('id');
@@ -28,6 +29,12 @@ class PostController extends AbstractController
             }
 
             $comments = $article->getComments();
+            $paginator = $container->get('knp_paginator');
+            $comments = $paginator->paginate(
+                $comments,
+                $request->query->getInt('page', 1),
+                $request->query->getInt('limit', 5)
+            );
 
             $comment = new Comment();
             $form = $this->createForm(AddCommentPostType::class, $comment);

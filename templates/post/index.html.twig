@@ -35,16 +35,16 @@
     </div>
 
     {% if not tags is empty %}
-    <div class="card mb-4">
-        <div class="card-body text-muted">
-            <p class="card-text">
-                Tags:
-                {% for tag in tags %}
-                    {{ tag.name }}{% if not loop.last %}, {% endif %}
-                {% endfor %}
-            </p>
+        <div class="card mb-4">
+            <div class="card-body text-muted">
+                <p class="card-text">
+                    Tags:
+                    {% for tag in tags %}
+                        {{ tag.name }}{% if not loop.last %}, {% endif %}
+                    {% endfor %}
+                </p>
+            </div>
         </div>
-    </div>
     {% endif %}
 
     <div class="card mb-4" id="comments">
@@ -67,6 +67,11 @@
                             </p>
                         </div>
                     {% endfor %}
+                    <div class="col-md-12 comments-pagination">
+                        <div class="comments-pagination-body">
+                            {{ knp_pagination_render(comments) }}
+                        </div>
+                    </div>
                 </div>
             {% endif %}
 

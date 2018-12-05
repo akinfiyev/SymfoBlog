@@ -10,3 +10,11 @@
 .comments-list .media {
     border-bottom: 1px dotted #ccc;
 }
+
+.comments-pagination-body {
+    float:right !important;
+}
+
+.comments-pagination {
+    display: flow-root !important;
+}
