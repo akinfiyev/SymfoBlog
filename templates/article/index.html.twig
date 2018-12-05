@@ -13,10 +13,17 @@
             </div>
             <div class="card-footer text-muted">
                 <div class="row">
-                    <div class="col-md-10 justify-content-center align-self-center">
+                    <div class="col-md-9 justify-content-center align-self-center">
                         Posted on {{ article.createdAt|date('F d, Y') }} by {{ article.author.username }}
                     </div>
-                    <div class="col-md-2 text-right">
+                    <div class="col-md-3 text-right">
+                        <a class="btn btn-light text-primary" href="{{ path('post') }}?id={{ article.id }}#comments"
+                           role="button">
+                            {% if article.comments|length > 0 %}
+                                {{ article.comments|length }}
+                            {% endif %}
+                            <i class="fa fa-comment"></i>
+                        </a>
                         <a class="btn btn-light text-primary" href="{{ path('like') }}?post_id={{ article.id }}"
                            role="button">
                             {% if article.articleLikes|length > 0 %}
@@ -25,6 +32,7 @@
                             <i class="fa fa-heart"></i>
                         </a>
                     </div>
+
                 </div>
             </div>
         </div>
