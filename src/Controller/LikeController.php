@@ -18,31 +18,40 @@ class LikeController extends AbstractController
     {
         $securityContext = $this->container->get('security.authorization_checker');
         if ($securityContext->isGranted('IS_AUTHENTICATED_FULLY')) {
+            $referer = $this->redirect($request
+                ->headers
+                ->get('referer'));
+
             $id = $request->get('post_id');
             if ($id !== null) {
-                $article = $this->getDoctrine()
-                    ->getRepository(Article::class)
-                    ->find($id);
+                $em = $this->getDoctrine()->getManager();
 
+                $article = $em->getRepository(Article::class)
+                    ->find($id);
                 if (!$article) {
-                    return new Response('Error: no article with id ' . $id . '.');
+                    return $referer;
                 }
 
                 $user = $this->get('security.token_storage')->getToken()->getUser();
 
-                $like = new UserLike();
-                $like->setUserId($user)
-                    ->setArticleId($article);
+                $like = $em->getRepository(UserLike::class)
+                    ->findOneBy(['user_id' => $user, 'article_id' => $article]);
+                if (!$like) {
+                    $like = new UserLike();
+                    $like->setUserId($user)
+                        ->setArticleId($article);
+                    $em->persist($like);
+                    $em->flush();
 
-                $em = $this->getDoctrine()->getManager();
-                $em->persist($like);
-                $em->flush();
+                    return $referer;
+                } else {
+                    $em->remove($like);
+                    $em->flush();
 
-                return $this->redirect($request
-                    ->headers
-                    ->get('referer'));
+                    return $referer;
+                }
             } else {
-                return new Response('Error: post_id is null.');
+                return $referer;
             }
         } else {
             return $this->redirectToRoute('app_login');
