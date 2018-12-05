@@ -65,10 +65,18 @@ class Article
      */
     private $comments;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Tag", mappedBy="article")
+     */
+    private $tags;
+
+    private $tagsInput;
+
     public function __construct()
     {
         $this->articleLikes = new ArrayCollection();
         $this->comments = new ArrayCollection();
+        $this->tags = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -182,6 +190,49 @@ class Article
                 $comment->setArticle(null);
             }
         }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Tag[]
+     */
+    public function getTags(): Collection
+    {
+        return $this->tags;
+    }
+
+    public function addTag(Tag $tag): self
+    {
+        if (!$this->tags->contains($tag)) {
+            $this->tags[] = $tag;
+            $tag->setArticle($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTag(Tag $tag): self
+    {
+        if ($this->tags->contains($tag)) {
+            $this->tags->removeElement($tag);
+            // set the owning side to null (unless already changed)
+            if ($tag->getArticle() === $this) {
+                $tag->setArticle(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getTagsInput(): ?string
+    {
+        return $this->tagsInput;
+    }
+
+    public function setTagsInput(?string $tagsInput): self
+    {
+        $this->tagsInput = $tagsInput;
 
         return $this;
     }

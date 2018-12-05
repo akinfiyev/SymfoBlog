@@ -29,6 +29,11 @@ class ArticlePostType extends AbstractType
                 'attr' => ['class' => 'form-control',
                     'placeholder' => 'Article text'],
                 'label_attr' => ['class' => 'sr-only'],
+            ])
+            ->add('tagsInput', TextType::class, [
+                'attr' => ['class' => 'form-control',
+                    'placeholder' => 'Tags via \', \' '],
+                'label_attr' => ['class' => 'sr-only'],
             ]);
     }
 
