@@ -1,0 +1,67 @@
+{% extends 'default/index.html.twig' %}
+
+{% block title %}Articles{% endblock %}
+
+{% block body %}
+    <div class="card mb-4">
+        {#<img class="card-img-top" src="">#}
+        <div class="card-body">
+            <h2 class="card-title">{{ article.title }}</h2>
+            <p class="card-text">{{ article.text }}</p>
+        </div>
+        <div class="card-footer text-muted">
+            <div class="row">
+                <div class="col-md-10 justify-content-center align-self-center">
+                    Posted on {{ article.createdAt|date('F d, Y') }} by {{ article.author.username }}
+                </div>
+                <div class="col-md-2 text-right">
+                    <a class="btn btn-light text-primary" href="{{ path('like') }}?post_id={{ article.id }}"
+                       role="button">
+                        {% if article.articleLikes|length > 0 %}
+                            {{ article.articleLikes|length }}
+                        {% endif %}
+                        <i class="fa fa-heart"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card mb-4">
+        <div class="card-body text-muted">
+            <p class="card-text">Tags: tag1, tag2</p>
+        </div>
+    </div>
+
+    <div class="card mb-4">
+        <div class="card-body">
+            <h3>Comments</h3>
+            {% if comments is empty %}
+                <div class="alert alert-success w-100 text-center">
+                    Comments not found
+                </div>
+            {% else %}
+                <div class="comments-list px-3">
+                    {% for comment in comments %}
+                        <div class="media mb-3">
+                            <div class="media-body">
+                                <h4 class="media-heading user_name">{{ comment.author.username }}</h4>
+                                {{ comment.text }}
+                            </div>
+                            <p class="text-right text-muted">
+                                <small>{{ comment.createdAt|date('H:i F d, Y') }}</small>
+                            </p>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+            <h3>Add comment</h3>
+            {{ form_start(form) }}
+            {{ form_errors(form.text) }}
+            {{ form_widget(form.text) }}
+            <button class="btn btn-primary" type="submit">Submit</button>
+            {{ form_end(form) }}
+        </div>
+    </div>
+{% endblock %}
