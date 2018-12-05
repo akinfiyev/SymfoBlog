@@ -40,7 +40,7 @@
                 <p class="card-text">
                     Tags:
                     {% for tag in tags %}
-                        {{ tag.name }}{% if not loop.last %}, {% endif %}
+                        <a href="{{ path('tag') }}?name={{ tag.name }}">{{ tag.name }}</a>{% if not loop.last %}, {% endif %}
                     {% endfor %}
                 </p>
             </div>

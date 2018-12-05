@@ -16,9 +16,14 @@ class ArticleService
 {
     public function generateTags(?string $tagsInput, Article $article)
     {
+        $tagsInput = trim($tagsInput);
         $tagsInput = explode(", ", $tagsInput);
+        $tagsInput = array_unique($tagsInput);
         $tags = [];
         foreach ($tagsInput as $tagName) {
+            $tagName = trim($tagName);
+            if ($tagName == '') continue;
+
             $tag = new Tag();
             $tag->setName($tagName)
                 ->setArticle($article);
