@@ -3,7 +3,6 @@
 namespace App\Controller;
 
 use App\Entity\Article;
-use App\Entity\Tag;
 use App\Form\Article\ArticlePostType;
 use App\Services\ArticleService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -20,7 +19,7 @@ class ArticleController extends AbstractController
     {
         $articles = $this->getDoctrine()
             ->getRepository(Article::class)
-            ->findAll();
+            ->findBy([], ['id' => 'DESC']);
 
         $paginator = $container->get('knp_paginator');
         $articles = $paginator->paginate(
