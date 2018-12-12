@@ -1,0 +1,64 @@
+{% extends 'default/admin.html.twig' %}
+
+{% block title %}Articles{% endblock %}
+
+{% block body %}
+    <table class="table">
+        <thead>
+        <tr>
+            <th scope="col">ID</th>
+            <th scope="col">Username</th>
+            <th scope="col">E-mail</th>
+            <th scope="col">Roles</th>
+            <th scope="col">Blogger role</th>
+            <th scope="col">Ban user</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for user in users %}
+            <tr>
+                <th scope="row">{{ user.id }}</th>
+                <td>{{ user.username }}</td>
+                <td>{{ user.email }}</td>
+                <td>{% for role in user.roles %}{{ role|split('ROLE_')|join }}{% if not loop.last %}, {% endif %}{% endfor %}</td>
+                <td>
+                    {% if 'ROLE_BANNED' not in user.roles %}
+                        {% if 'ROLE_BLOGGER' in user.roles %}
+                            <a class="btn btn-warning"
+                               href="{{ path('make_user_blogger') }}?user_id={{ user.id }}"
+                               role="button">
+                                Delete blogger role <i class="fa fa-times"></i>
+                            </a>
+                        {% else %}
+                            <a class="btn btn-success"
+                               href="{{ path('make_user_blogger') }}?user_id={{ user.id }}"
+                               role="button">
+                                Add blogger role <i class="fa fa-check"></i>
+                            </a>
+                        {% endif %}
+                    {% endif %}
+                </td>
+                <td>
+                    {% if 'ROLE_BANNED' in user.roles %}
+                        <a class="btn btn-warning"
+                           href="{{ path('ban_user') }}?user_id={{ user.id }}"
+                           role="button">
+                            Undo ban <i class="fa fa-level-up-alt"></i>
+                        </a>
+                    {% else %}
+                        <a class="btn btn-danger"
+                           href="{{ path('ban_user') }}?user_id={{ user.id }}"
+                           role="button">
+                            Ban <i class="fa fa-ban"></i>
+                        </a>
+                    {% endif %}
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <div class="col-md-3 mx-auto">
+        {{ knp_pagination_render(users) }}
+    </div>
+{% endblock %}

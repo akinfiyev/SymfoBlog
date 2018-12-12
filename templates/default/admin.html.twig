@@ -24,8 +24,7 @@
             <span class="navbar-toggler-icon"></span>
         </button>
 
-        <div class="collapse navbar-collapse">
-
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item"><a class="nav-link" href="{{ path('index') }}">Go to Blog</a></li>
                 {% if is_granted(expression(
@@ -33,12 +32,14 @@
                     )) %}
                     <li class="nav-item"><a class="nav-link" href="{{ path('post_article') }}">Add article</a></li>
                 {% endif %}
-                <li class="nav-item"><a class="nav-link" href="{{ path('articles_approval') }}">Articles approval</a></li>
+                <li class="nav-item{% if app.request.attributes.get('_route') == 'articles_approval' %} active{% endif %}"><a class="nav-link" href="{{ path('articles_approval') }}">Articles approval</a></li>
+                <li class="nav-item{% if app.request.attributes.get('_route') == 'users_list' %} active{% endif %}"><a class="nav-link" href="{{ path('users_list') }}">Users list</a></li>
                 <li class="nav-item"><a class="nav-link" href="{{ path('app_logout') }}">Logout</a></li>
             </ul>
         </div>
     </div>
 </nav>
+
 
 <div class="container mt-4">
     <div class="row">
