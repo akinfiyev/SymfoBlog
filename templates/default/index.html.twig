@@ -22,20 +22,20 @@
             <span class="navbar-toggler-icon"></span>
         </button>
 
-        <div class="collapse navbar-collapse">
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
 
             <ul class="navbar-nav mr-auto">
-                <li class="nav-item"><a class="nav-link" href="{{ path('index') }}">Home</a></li>
+                <li class="nav-item{% if app.request.attributes.get('_route') == 'index' %} active{% endif %}"><a class="nav-link" href="{{ path('index') }}">Home</a></li>
                 {% if is_granted('IS_AUTHENTICATED_FULLY') %}
                     <li class="nav-item"><a class="nav-link" href="{{ path('app_logout') }}">Logout</a></li>
                 {% else %}
-                    <li class="nav-item"><a class="nav-link" href="{{ path('app_login') }}">Login</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{{ path('register') }}">Registration</a></li>
+                    <li class="nav-item{% if app.request.attributes.get('_route') == 'app_login' %} active{% endif %}"><a class="nav-link" href="{{ path('app_login') }}">Login</a></li>
+                    <li class="nav-item{% if app.request.attributes.get('_route') == 'register' %} active{% endif %}"><a class="nav-link" href="{{ path('register') }}">Registration</a></li>
                 {% endif %}
                 {% if is_granted(expression(
                     '"ROLE_BLOGGER" in roles'
                     )) %}
-                    <li class="nav-item"><a class="nav-link" href="{{ path('post_article') }}">Add article</a></li>
+                    <li class="nav-item{% if app.request.attributes.get('_route') == 'post_article' %} active{% endif %}"><a class="nav-link" href="{{ path('post_article') }}">Add article</a></li>
                 {% endif %}
             </ul>
         </div>
