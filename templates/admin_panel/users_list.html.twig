@@ -27,13 +27,13 @@
                             <a class="btn btn-warning"
                                href="{{ path('make_user_blogger') }}?user_id={{ user.id }}"
                                role="button">
-                                Delete blogger role <i class="fa fa-times"></i>
+                                <i class="fa fa-times"></i> Delete blogger role
                             </a>
                         {% else %}
                             <a class="btn btn-success"
                                href="{{ path('make_user_blogger') }}?user_id={{ user.id }}"
                                role="button">
-                                Add blogger role <i class="fa fa-check"></i>
+                                <i class="fa fa-plus"></i> Add blogger role
                             </a>
                         {% endif %}
                     {% endif %}
@@ -43,13 +43,13 @@
                         <a class="btn btn-warning"
                            href="{{ path('ban_user') }}?user_id={{ user.id }}"
                            role="button">
-                            Undo ban <i class="fa fa-level-up-alt"></i>
+                            <i class="fa fa-level-up-alt"></i> Undo ban
                         </a>
                     {% else %}
                         <a class="btn btn-danger"
                            href="{{ path('ban_user') }}?user_id={{ user.id }}"
                            role="button">
-                            Ban <i class="fa fa-ban"></i>
+                            <i class="fa fa-ban"></i> Ban
                         </a>
                     {% endif %}
                 </td>
