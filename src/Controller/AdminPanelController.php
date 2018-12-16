@@ -68,7 +68,7 @@ class AdminPanelController extends AbstractController
     /**
      * @Route("/admin/users/", name="users_list")
      */
-    public function userListingAction (Request $request, ContainerInterface $container)
+    public function userListingAction(Request $request, ContainerInterface $container)
     {
         $users = $this->getDoctrine()
             ->getRepository(User::class)
@@ -101,11 +101,9 @@ class AdminPanelController extends AbstractController
                 throw $this->createNotFoundException('The user does not exist.');
             }
 
-            if (in_array('ROLE_BLOGGER', $user->getRoles()))
-            {
+            if (in_array('ROLE_BLOGGER', $user->getRoles())) {
                 $roles = $user->getRoles();
-                if (($key = array_search('ROLE_BLOGGER', $roles)) !== false)
-                {
+                if (($key = array_search('ROLE_BLOGGER', $roles)) !== false) {
                     unset($roles[$key]);
                 }
                 $user->setRoles($roles);
@@ -138,8 +136,7 @@ class AdminPanelController extends AbstractController
                 throw $this->createNotFoundException('The user does not exist.');
             }
 
-            if (in_array('ROLE_BANNED', $user->getRoles()))
-            {
+            if (in_array('ROLE_BANNED', $user->getRoles())) {
                 $user->setRoles(['ROLE_USER']);
             } else {
                 $user->setRoles(['ROLE_BANNED']);

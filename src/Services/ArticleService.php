@@ -8,7 +8,6 @@
 
 namespace App\Services;
 
-
 use App\Entity\Article;
 use App\Entity\Tag;
 
@@ -22,7 +21,9 @@ class ArticleService
         $tags = [];
         foreach ($tagsInput as $tagName) {
             $tagName = trim($tagName);
-            if ($tagName == '') continue;
+            if ($tagName == '') {
+                continue;
+            }
 
             $tag = new Tag();
             $tag->setName($tagName)
