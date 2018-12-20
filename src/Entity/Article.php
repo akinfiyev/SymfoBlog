@@ -10,7 +10,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * @ORM\Entity(repositoryClass="App\Repository\ArticleRepository")
  */
-class Article
+class Article implements \JsonSerializable
 {
     /**
      * @ORM\Id()
@@ -74,6 +74,7 @@ class Article
 
     /**
      * @ORM\Column(type="boolean")
+     * @Assert\NotNull()
      */
     private $isApproved;
 
@@ -252,5 +253,17 @@ class Article
         $this->isApproved = $isApproved;
 
         return $this;
+    }
+
+    public function jsonSerialize()
+    {
+        return [
+            'id' => $this->getId(),
+            'title' => $this->getTitle(),
+            'text' => $this->getText(),
+            'createdAt' => $this->getCreatedAt(),
+            'isApproved' => $this->isApproved,
+            'author_id' => $this->getAuthor()->getId(),
+        ];
     }
 }

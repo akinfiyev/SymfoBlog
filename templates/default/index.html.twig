@@ -58,14 +58,24 @@
 
         <div class="col-md-4">
             {% block sidebar %}
-            <div class="card">
-                <h5 class="card-header">Admin panel</h5>
-                <div class="card-body">
-                    <ul class="list-unstyled mb-0">
-                        <li><a href="/admin">Go to Admin panel</a></li>
-                    </ul>
+                <div class="card mb-3">
+                    <h5 class="card-header">Admin panel</h5>
+                    <div class="card-body">
+                        <ul class="list-unstyled mb-0">
+                            <li><a href="/admin">Go to Admin panel</a></li>
+                        </ul>
+                    </div>
                 </div>
-            </div>
+                <div class="card mb-3">
+                    <h5 class="card-header">API</h5>
+                    <div class="card-body">
+                        <ul class="list-unstyled mb-0">
+                            <li><a href="{{ path('api_get_article', {'id': 1}) }}">Get article by ID</a></li>
+                            <li><a href="{{ path('api_get_articles') }}">Get all articles</a></li>
+                            <li><a href="{{ path('api_add_article') }}">Add article</a></li>
+                        </ul>
+                    </div>
+                </div>
             {% endblock %}
         </div>
     </div>
