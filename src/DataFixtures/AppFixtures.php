@@ -53,8 +53,8 @@ class AppFixtures extends Fixture
 //        articles
         for ($i = 0; $i < 15; $i++) {
             $article = new Article();
-            $article->setTitle('My article title ' . $i)
-                ->setText('My article text ' . $i . '. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.')
+            $article->setTitle('Lorem article ' . $i)
+                ->setText('Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.')
                 ->setCreatedAt(new \DateTime())
                 ->setAuthor($this->getReference('user_blogger'))
                 ->setIsApproved($i % 2 == 0 ? true : false);
@@ -71,7 +71,7 @@ class AppFixtures extends Fixture
                     $comment->setArticle($this->getReference('article_' . $i))
                         ->setText('Lorem ipsum comment dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.')
                         ->setCreatedAt(new \DateTime())
-                        ->setAuthor($this->getReference('user_' . $i));
+                        ->setAuthor($this->getReference('user_' . random_int(0, 14)));
 
                     $manager->persist($comment);
                 }
