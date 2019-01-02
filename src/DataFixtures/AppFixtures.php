@@ -39,8 +39,7 @@ class AppFixtures extends Fixture
         $this->addReference('user_blogger', $user_blogger);
         $this->addReference('user_admin', $user_admin);
 
-        for ($i = 0; $i <15; $i++)
-        {
+        for ($i = 0; $i < 15; $i++) {
             $user = new User();
             $user->setEmail('user' . $i . '@gmail.com')
                 ->setUsername('user' . $i)
@@ -52,8 +51,7 @@ class AppFixtures extends Fixture
         }
 
 //        articles
-        for ($i = 0; $i <15; $i++)
-        {
+        for ($i = 0; $i < 15; $i++) {
             $article = new Article();
             $article->setTitle('My article title ' . $i)
                 ->setText('My article text ' . $i . '. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.')
@@ -65,23 +63,27 @@ class AppFixtures extends Fixture
             $this->addReference('article_' . $i, $article);
         }
 
-        for ($i = 0; $i <15; $i++) {
+        for ($i = 0; $i < 15; $i++) {
             for ($j = 0; $j < $i; $j++) {
 //                comments
-                $comment = new Comment();
-                $comment->setArticle($this->getReference('article_' . $i))
-                    ->setText('Lorem ipsum comment dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.')
-                    ->setCreatedAt(new \DateTime())
-                    ->setAuthor($this->getReference('user_' . $i));
+                if (random_int(0, 1)) {
+                    $comment = new Comment();
+                    $comment->setArticle($this->getReference('article_' . $i))
+                        ->setText('Lorem ipsum comment dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.')
+                        ->setCreatedAt(new \DateTime())
+                        ->setAuthor($this->getReference('user_' . $i));
 
-                $manager->persist($comment);
+                    $manager->persist($comment);
+                }
 
 //                likes
-                $like = new UserLike();
-                $like->setArticleId($this->getReference('article_' . $i))
-                    ->setUserId($this->getReference('user_' . $i));
+                if (random_int(0, 1)) {
+                    $like = new UserLike();
+                    $like->setArticleId($this->getReference('article_' . $i))
+                        ->setUserId($this->getReference('user_' . $i));
 
-                $manager->persist($like);
+                    $manager->persist($like);
+                }
             }
         }
 
