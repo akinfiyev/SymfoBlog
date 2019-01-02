@@ -13,6 +13,7 @@
                 <th scope="col">Author</th>
                 <th scope="col">Tags</th>
                 <th scope="col">Created</th>
+                <th scope="col">Edit</th>
                 <th scope="col">Approve</th>
             </tr>
             </thead>
@@ -26,11 +27,22 @@
                     <td>{% for tag in article.tags %}{{ tag.name }}{% if not loop.last %}, {% endif %}{% endfor %}</td>
                     <td>{{ article.createdAt|date('H:i d F Y') }}</td>
                     <td>
-                        <a class="btn btn-success"
-                           href="{{ path('article_approve') }}?post_id={{ article.id }}"
+                        <a class="btn"
+                           href="#"
                            role="button">
-                            <i class="fa fa-check"></i> Approve
+                            <i class="fa fa-edit"></i> Edit
                         </a>
+                    </td>
+                    <td>
+                        {% if not article.isApproved %}
+                            <a class="btn btn-success"
+                               href="{{ path('article_approve') }}?post_id={{ article.id }}"
+                               role="button">
+                                <i class="fa fa-check"></i> Approve
+                            </a>
+                        {% else %}
+                            <i class="fa fa-check"></i> Approved
+                        {% endif %}
                     </td>
                 </tr>
             {% endfor %}

@@ -20,7 +20,28 @@ class AdminPanelController extends AbstractController
     }
 
     /**
-     * @Route("/admin/articles/approval/", name="articles_approval")
+     * @Route("/admin/articles/", name="admin_articles")
+     */
+    public function adminPanelArticlesAction(Request $request, ContainerInterface $container)
+    {
+        $articles = $this->getDoctrine()
+            ->getRepository(Article::class)
+            ->findAll();
+
+        $paginator = $container->get('knp_paginator');
+        $articles = $paginator->paginate(
+            $articles,
+            $request->query->getInt('page', 1),
+            $request->query->getInt('limit', 5)
+        );
+
+        return $this->render('admin_panel/articles.html.twig', [
+            'articles' => $articles,
+        ]);
+    }
+
+    /**
+     * @Route("/admin/articles/approval/", name="admin_articles_unapproved")
      */
     public function articleApprovalAction(Request $request, ContainerInterface $container)
     {
