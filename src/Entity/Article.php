@@ -80,7 +80,6 @@ class Article implements \JsonSerializable
     /**
      * @var bool
      * @ORM\Column(type="boolean")
-     * @Assert\NotNull()
      */
     private $isApproved;
 
