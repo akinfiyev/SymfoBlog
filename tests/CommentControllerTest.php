@@ -4,12 +4,12 @@ namespace App\Tests;
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
-class DefaultControllerTest extends WebTestCase
+class CommentControllerTest extends WebTestCase
 {
     public function testRoutes()
     {
         $client = static::createClient();
-        $client->request('GET', '/');
+        $client->request('GET', '/comment');
         $this->assertEquals(302, $client->getResponse()->getStatusCode());
     }
 }
