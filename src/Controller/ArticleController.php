@@ -45,7 +45,8 @@ class ArticleController extends AbstractController
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $article->setAuthor($this->getUser())
-                ->setCreatedAt(new \DateTime());
+                ->setCreatedAt(new \DateTime())
+                ->setIsApproved(false);
             $tags = $articleService->generateTags($article->getTagsInput(), $article);
 
             $em = $this->getDoctrine()->getManager();
