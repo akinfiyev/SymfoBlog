@@ -4,7 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Article;
 use App\Entity\Comment;
-use App\Form\Comment\AddCommentPostType;
+use App\Form\Comment\AddCommentType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -37,7 +37,7 @@ class PostController extends AbstractController
             );
 
             $comment = new Comment();
-            $form = $this->createForm(AddCommentPostType::class, $comment);
+            $form = $this->createForm(AddCommentType::class, $comment);
             $form->handleRequest($request);
             if ($form->isSubmitted() && $form->isValid()) {
                 if ($user == null) {

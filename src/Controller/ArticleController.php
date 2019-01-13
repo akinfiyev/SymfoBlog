@@ -3,8 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Article;
-use App\Form\Article\ArticlePostType;
-use App\Services\ArticleService;
+use App\Form\Article\AddArticleType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -36,25 +35,25 @@ class ArticleController extends AbstractController
     /**
      * @Route("/post/new", name="post_article")
      */
-    public function postAction(Request $request, ArticleService $articleService)
+    public function postAction(Request $request)
     {
         $article = new Article();
 
-        $form = $this->createForm(ArticlePostType::class, $article);
+        $form = $this->createForm(AddArticleType::class, $article);
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $article->setAuthor($this->getUser())
                 ->setCreatedAt(new \DateTime())
                 ->setIsApproved(false);
-            $tags = $articleService->generateTags($article->getTagsInput(), $article);
-
+//            $tags = $articleService->generateTags($article->getTagsInput(), $article);
+//
             $em = $this->getDoctrine()->getManager();
-            if ($tags !== null) {
-                foreach ($tags as $tag) {
-                    $em->persist($tag);
-                }
-            }
+//            if ($tags !== null) {
+//                foreach ($tags as $tag) {
+//                    $em->persist($tag);
+//                }
+//            }
             $em->persist($article);
             $em->flush();
 

@@ -4,7 +4,7 @@ namespace App\Controller\Api;
 
 use App\Entity\Article;
 use App\Entity\User;
-use App\Form\Article\ArticlePostType;
+use App\Form\Article\AddArticleType;
 use App\Services\ArticleService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\DependencyInjection\ContainerInterface;
