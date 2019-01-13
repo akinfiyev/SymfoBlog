@@ -9,14 +9,14 @@
 namespace App\EntityListener;
 
 use App\Entity\User;
-use App\Services\UserService;
+use App\Services\EncodeService;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Mapping\PrePersist;
 
 class UserListener
 {
     /**
-     * @var UserService
+     * @var EncodeService
      */
     private $userService;
 
@@ -24,7 +24,7 @@ class UserListener
      * UserListener constructor.
      * @param $userService
      */
-    public function __construct(UserService $userService)
+    public function __construct(EncodeService $userService)
     {
         $this->userService = $userService;
     }
@@ -32,6 +32,6 @@ class UserListener
     /** @PrePersist */
     public function prePersistHandler(User $user, LifecycleEventArgs $event)
     {
-        $user->setPassword($this->userService->encodePassword($user));
+        $user->setPassword($this->userService->encodeUserPassword($user->getPlainPassword(), $user));
     }
 }

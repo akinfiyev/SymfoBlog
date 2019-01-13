@@ -11,25 +11,21 @@ namespace App\Services;
 use App\Entity\User;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
-class UserService
+class EncodeService
 {
     private $encoder;
 
-    /**
-     * UserService constructor.
-     */
     public function __construct(UserPasswordEncoderInterface $encoder)
     {
         $this->encoder = $encoder;
     }
 
-    public function encodePassword(User $user)
+    public function encodeUserPassword(?String $plainPassword, User $user)
     {
-        $plainPassword = $user->getPlainPassword();
-
         if (!empty($plainPassword)) {
             return $this->encoder->encodePassword($user, $plainPassword);
         }
+
         return $plainPassword;
     }
 }
