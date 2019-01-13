@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: q
- * Date: 29.11.18
- * Time: 14:27
- */
 
 namespace App\EntityListener;
 
@@ -30,7 +24,7 @@ class UserListener
     }
 
     /** @PrePersist */
-    public function prePersistHandler(User $user, LifecycleEventArgs $event)
+    public function prePersistHandler(User $user)
     {
         $user->setPassword($this->userService->encodeUserPassword($user->getPlainPassword(), $user));
     }
