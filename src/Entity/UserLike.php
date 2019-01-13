@@ -11,6 +11,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 class UserLike
 {
     /**
+     * @var int
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
@@ -18,42 +19,46 @@ class UserLike
     private $id;
 
     /**
+     * @var User
      * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="userLikes")
      * @ORM\JoinColumn(nullable=false)
+     * @Assert\NotNull()
      */
-    private $user_id;
+    private $user;
 
     /**
+     * @var Article
      * @ORM\ManyToOne(targetEntity="App\Entity\Article", inversedBy="articleLikes")
      * @ORM\JoinColumn(nullable=false)
+     * @Assert\NotNull()
      */
-    private $article_id;
+    private $article;
 
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getUserId(): ?User
+    public function getUser(): ?User
     {
-        return $this->user_id;
+        return $this->user;
     }
 
-    public function setUserId(?User $user_id): self
+    public function setUser(?User $user): self
     {
-        $this->user_id = $user_id;
+        $this->user = $user;
 
         return $this;
     }
 
-    public function getArticleId(): ?Article
+    public function getArticle(): ?Article
     {
-        return $this->article_id;
+        return $this->article;
     }
 
-    public function setArticleId(?Article $article_id): self
+    public function setArticle(?Article $article): self
     {
-        $this->article_id = $article_id;
+        $this->article = $article;
 
         return $this;
     }

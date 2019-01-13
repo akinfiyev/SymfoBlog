@@ -11,6 +11,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 class Comment
 {
     /**
+     * @var int
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
@@ -18,11 +19,12 @@ class Comment
     private $id;
 
     /**
+     * @var string
      * @ORM\Column(type="string", length=255)
      * @Assert\NotNull()
      * @Assert\Length(
      *      min = 5,
-     *      max = 100,
+     *      max = 255,
      *      minMessage = "Your comment must be at least {{ limit }} characters long",
      *      maxMessage = "Your comment cannot be longer than {{ limit }} characters"
      * )
@@ -31,20 +33,29 @@ class Comment
     private $text;
 
     /**
+     * @var User
      * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="comments")
      * @ORM\JoinColumn(nullable=false)
      */
     private $author;
 
     /**
+     * @var \DateTime
      * @ORM\Column(type="datetime")
      */
     private $createdAt;
 
     /**
+     * @var Article
      * @ORM\ManyToOne(targetEntity="App\Entity\Article", inversedBy="comments")
      */
     private $article;
+
+    /**
+     * @var bool
+     * @ORM\Column(type="boolean")
+     */
+    private $isDeleted;
 
     public function getId(): ?int
     {
@@ -95,6 +106,18 @@ class Comment
     public function setArticle(?Article $article): self
     {
         $this->article = $article;
+
+        return $this;
+    }
+
+    public function getIsDeleted(): ?bool
+    {
+        return $this->isDeleted;
+    }
+
+    public function setIsDeleted(bool $isDeleted): self
+    {
+        $this->isDeleted = $isDeleted;
 
         return $this;
     }

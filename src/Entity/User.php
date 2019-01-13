@@ -17,6 +17,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 class User implements UserInterface, \JsonSerializable
 {
     /**
+     * @var int
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
@@ -24,6 +25,7 @@ class User implements UserInterface, \JsonSerializable
     private $id;
 
     /**
+     * @var string
      * @ORM\Column(type="string", length=180, unique=true)
      * @Assert\NotBlank()
      * @Assert\Email()
@@ -31,6 +33,7 @@ class User implements UserInterface, \JsonSerializable
     private $email;
 
     /**
+     * @var array
      * @ORM\Column(type="json")
      */
     private $roles = [];
@@ -54,11 +57,13 @@ class User implements UserInterface, \JsonSerializable
     private $plainPassword;
 
     /**
+     * @var ArrayCollection
      * @ORM\OneToMany(targetEntity="App\Entity\Article", mappedBy="author")
      */
     private $articles;
 
     /**
+     * @var User
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank()
      * @Assert\Length(
@@ -71,11 +76,13 @@ class User implements UserInterface, \JsonSerializable
     private $username;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\UserLike", mappedBy="user_id")
+     * @var ArrayCollection
+     * @ORM\OneToMany(targetEntity="App\Entity\UserLike", mappedBy="user")
      */
     private $userLikes;
 
     /**
+     * @var ArrayCollection
      * @ORM\OneToMany(targetEntity="App\Entity\Comment", mappedBy="author")
      */
     private $comments;
@@ -197,7 +204,6 @@ class User implements UserInterface, \JsonSerializable
     {
         if ($this->articles->contains($article)) {
             $this->articles->removeElement($article);
-            // set the owning side to null (unless already changed)
             if ($article->getAuthor() === $this) {
                 $article->setAuthor(null);
             }
@@ -225,7 +231,7 @@ class User implements UserInterface, \JsonSerializable
     {
         if (!$this->userLikes->contains($userLike)) {
             $this->userLikes[] = $userLike;
-            $userLike->setUserId($this);
+            $userLike->setUser($this);
         }
 
         return $this;
@@ -235,9 +241,8 @@ class User implements UserInterface, \JsonSerializable
     {
         if ($this->userLikes->contains($userLike)) {
             $this->userLikes->removeElement($userLike);
-            // set the owning side to null (unless already changed)
-            if ($userLike->getUserId() === $this) {
-                $userLike->setUserId(null);
+            if ($userLike->getUser() === $this) {
+                $userLike->setUser(null);
             }
         }
 
@@ -275,13 +280,6 @@ class User implements UserInterface, \JsonSerializable
         return $this;
     }
 
-    /**
-     * Specify data which should be serialized to JSON
-     * @link https://php.net/manual/en/jsonserializable.jsonserialize.php
-     * @return mixed data which can be serialized by <b>json_encode</b>,
-     * which is a value of any type other than a resource.
-     * @since 5.4.0
-     */
     public function jsonSerialize()
     {
         return [

@@ -13,6 +13,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 class Article implements \JsonSerializable
 {
     /**
+     * @var int
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
@@ -20,6 +21,7 @@ class Article implements \JsonSerializable
     private $id;
 
     /**
+     * @var string
      * @ORM\Column(type="string", length=255)
      * @Assert\NotNull()
      * @Assert\Length(
@@ -32,6 +34,7 @@ class Article implements \JsonSerializable
     private $title;
 
     /**
+     * @var string
      * @ORM\Column(type="string", length=255)
      * @Assert\NotNull()
      * @Assert\Length(
@@ -51,32 +54,37 @@ class Article implements \JsonSerializable
     private $author;
 
     /**
+     * @var \DateTime
      * @ORM\Column(type="datetime")
      */
     private $createdAt;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\UserLike", mappedBy="article_id")
+     * @var ArrayCollection
+     * @ORM\OneToMany(targetEntity="App\Entity\UserLike", mappedBy="article")
      */
     private $articleLikes;
 
     /**
+     * @var ArrayCollection
      * @ORM\OneToMany(targetEntity="App\Entity\Comment", mappedBy="article")
      */
     private $comments;
 
     /**
+     * @var ArrayCollection
      * @ORM\OneToMany(targetEntity="App\Entity\Tag", mappedBy="article")
      */
     private $tags;
 
-    private $tagsInput;
-
     /**
+     * @var bool
      * @ORM\Column(type="boolean")
      * @Assert\NotNull()
      */
     private $isApproved;
+
+    private $tagsInput;
 
     public function __construct()
     {
@@ -150,7 +158,7 @@ class Article implements \JsonSerializable
     {
         if (!$this->articleLikes->contains($articleLike)) {
             $this->articleLikes[] = $articleLike;
-            $articleLike->setArticleId($this);
+            $articleLike->setArticle($this);
         }
 
         return $this;
@@ -160,9 +168,8 @@ class Article implements \JsonSerializable
     {
         if ($this->articleLikes->contains($articleLike)) {
             $this->articleLikes->removeElement($articleLike);
-            // set the owning side to null (unless already changed)
-            if ($articleLike->getArticleId() === $this) {
-                $articleLike->setArticleId(null);
+            if ($articleLike->getArticle() === $this) {
+                $articleLike->setArticle(null);
             }
         }
 
@@ -191,7 +198,6 @@ class Article implements \JsonSerializable
     {
         if ($this->comments->contains($comment)) {
             $this->comments->removeElement($comment);
-            // set the owning side to null (unless already changed)
             if ($comment->getArticle() === $this) {
                 $comment->setArticle(null);
             }
@@ -222,7 +228,6 @@ class Article implements \JsonSerializable
     {
         if ($this->tags->contains($tag)) {
             $this->tags->removeElement($tag);
-            // set the owning side to null (unless already changed)
             if ($tag->getArticle() === $this) {
                 $tag->setArticle(null);
             }
