@@ -38,8 +38,8 @@ class LikeController extends AbstractController
                     ->findOneBy(['user_id' => $user, 'article_id' => $article]);
                 if (!$like) {
                     $like = new UserLike();
-                    $like->setUserId($user)
-                        ->setArticleId($article);
+                    $like->setUser($user)
+                        ->setArticle($article);
                     $em->persist($like);
                     $em->flush();
 
