@@ -28,6 +28,8 @@ security:
             guard:
                 authenticators:
                     - App\Security\UserCustomAuthenticator
+                    - App\Security\ApiAuthenticator
+                entry_point: App\Security\UserCustomAuthenticator
             form_login:
                 login_path: app_login
                 username_parameter: login[email]
