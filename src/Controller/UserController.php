@@ -42,4 +42,9 @@ class UserController extends AbstractController
     {
 
     }
+
+    public function showUserProfileSidebarAction(Request $request)
+    {
+        return $this->render('base/sidebar/user/profile.html.twig', []);
+    }
 }

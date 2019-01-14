@@ -21,7 +21,7 @@ class SecurityController extends AbstractController
             'action' => $this->generateUrl('login_check')
         ]);
 
-        return $this->render('security/login.html.twig', [
+        return $this->render('base/sidebar/security/login.html.twig', [
             'form' => $form->createView(),
             'error' => $error,
         ]);

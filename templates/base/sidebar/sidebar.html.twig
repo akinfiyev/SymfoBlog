@@ -4,9 +4,7 @@
         <div class="card mb-3">
             <h5 class="card-header">Profile</h5>
             <div class="card-body">
-                <ul class="list-unstyled mb-0">
-                    <li><a href="{{ path('user_profile') }}">Go to profile</a></li>
-                </ul>
+                {{ render(controller('App\\Controller\\UserController::showUserProfileSidebarAction')) }}
             </div>
         </div>
         {% else %}
