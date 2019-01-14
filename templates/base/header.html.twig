@@ -1,0 +1,30 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container">
+        <a class="navbar-brand" href="{{ path('index') }}">SymfoBlog</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+
+            <ul class="navbar-nav mr-auto">
+                {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+                {% else %}
+                    <li class="nav-item{% if app.request.attributes.get('_route') == 'registration' %} active{% endif %}">
+                        <a class="nav-link" href="{{ path('user_registration') }}">Registration</a></li>
+                {% endif %}
+
+                {#<li class="nav-item{% if app.request.attributes.get('_route') == 'index' %} active{% endif %}"><a class="nav-link" href="{{ path('index') }}">Home</a></li>#
+                    {#<li class="nav-item"><a class="nav-link" href="{{ path('app_logout') }}">Logout</a></li>#}
+
+
+                {#{% if is_granted(expression(#}
+                {#'"ROLE_BLOGGER" in roles'#}
+                {#)) %}#}
+                {#<li class="nav-item{% if app.request.attributes.get('_route') == 'post_article' %} active{% endif %}"><a class="nav-link" href="{{ path('post_article') }}">Add article</a></li>#}
+                {#{% endif %}#}
+            </ul>
+        </div>
+    </div>
+</nav>
