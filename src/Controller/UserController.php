@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Form\User\UserRegisterType;
+use http\Env\Response;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -11,9 +12,9 @@ use Symfony\Component\Routing\Annotation\Route;
 class UserController extends AbstractController
 {
     /**
-     * @Route("/register", name="register")
+     * @Route("/registration", name="user_registration")
      */
-    public function register(Request $request)
+    public function registrationAction(Request $request)
     {
         $user = new User();
 
@@ -29,8 +30,16 @@ class UserController extends AbstractController
             return $this->redirectToRoute('app_login');
         }
 
-        return $this->render('user/register.html.twig', [
+        return $this->render('user/registration.html.twig', [
             'form' => $form->createView(),
         ]);
+    }
+
+    /**
+     * @Route("/profile", name="user_profile")
+     */
+    public function showUserProfileAction(Request $request)
+    {
+
     }
 }
