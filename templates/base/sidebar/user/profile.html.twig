@@ -7,7 +7,7 @@
     <a href="{{ path('user_profile_edit') }}"><div class="btn w-100">Change avatar</div></a>
 {% endif %}
 <hr class="mt-0">
-<div class="text-center">Role: {{ user.roles|join }}</div>
+<div class="text-center">Role: {{ user.roles|join(', ') }}</div>
 <hr>
 {% if is_granted('ROLE_ADMIN') %}
     <a href="{{ path('admin_panel') }}"><div class="btn btn-dark w-100">Admin panel</div></a>
@@ -16,7 +16,7 @@
     <a href="{{ path('article_add') }}"><div class="btn btn-light w-100">Add article</div></a>
 {% endif %}
 <a href="{{ path('user_profile_edit') }}"><div class="btn btn-light w-100">Edit profile</div></a>
-{% if not is_granted('ROLE_BLOGGER') %}
+{% if not is_granted('ROLE_BLOGGER') and not user.hasRequestBloggerRole %}
     <a href="{{ path('user_role_blogger_request') }}"><div class="btn btn-light w-100">I want to be blogger</div></a>
 {% endif %}
 <a href="{{ path('app_logout') }}"><div class="btn btn-light w-100">Logout</div></a>
