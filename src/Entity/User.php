@@ -6,6 +6,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -86,6 +87,19 @@ class User implements UserInterface, \JsonSerializable
      * @ORM\OneToMany(targetEntity="App\Entity\Comment", mappedBy="author")
      */
     private $comments;
+
+    /**
+     * @var File
+     * @ORM\Column(type="string", nullable=true)
+     *
+     * @Assert\File(mimeTypes={"image/png", "image/jpeg"})
+     */
+    private $avatar;
+
+    /**
+     * @ORM\Column(type="boolean", nullable=true)
+     */
+    private $hasRequestBloggerRole;
 
     public function __construct()
     {
@@ -280,6 +294,18 @@ class User implements UserInterface, \JsonSerializable
         return $this;
     }
 
+    public function getAvatar(): ?string
+    {
+        return $this->avatar;
+    }
+
+    public function setAvatar(?string $avatar): self
+    {
+        $this->avatar = $avatar;
+
+        return $this;
+    }
+
     public function jsonSerialize()
     {
         return [
@@ -287,5 +313,17 @@ class User implements UserInterface, \JsonSerializable
             'username' => $this->getUsername(),
             'roles' => $this->getRoles(),
         ];
+    }
+
+    public function getHasRequestBloggerRole(): ?bool
+    {
+        return $this->hasRequestBloggerRole;
+    }
+
+    public function setHasRequestBloggerRole(?bool $hasRequestBloggerRole): self
+    {
+        $this->hasRequestBloggerRole = $hasRequestBloggerRole;
+
+        return $this;
     }
 }

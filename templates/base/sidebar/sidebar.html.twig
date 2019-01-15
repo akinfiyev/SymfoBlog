@@ -1,37 +1,26 @@
+{% if is_granted('IS_AUTHENTICATED_FULLY') %}
+    <div class="card mb-3">
+        <h5 class="card-header">Profile</h5>
+        <div class="card-body">
+            {{ render(controller('App\\Controller\\UserController::showUserProfileSidebarAction')) }}
+        </div>
+    </div>
+{% else %}
+    <div class="card mb-3">
+        <h5 class="card-header">Login</h5>
+        <div class="card-body">
+            {{ render(controller('App\\Controller\\SecurityController::loginAction')) }}
+        </div>
+    </div>
+{% endif %}
 
-    {% block sidebar %}
-        {% if is_granted('IS_AUTHENTICATED_FULLY') %}
-        <div class="card mb-3">
-            <h5 class="card-header">Profile</h5>
-            <div class="card-body">
-                {{ render(controller('App\\Controller\\UserController::showUserProfileSidebarAction')) }}
-            </div>
-        </div>
-        {% else %}
-        <div class="card mb-3">
-            <h5 class="card-header">Login</h5>
-            <div class="card-body">
-                {{ render(controller('App\\Controller\\SecurityController::loginAction')) }}
-            </div>
-        </div>
-        {% endif %}
-
-        <div class="card mb-3">
-            <h5 class="card-header">Admin panel</h5>
-            <div class="card-body">
-                <ul class="list-unstyled mb-0">
-                    {#<li><a href="/admin">Go to Admin panel</a></li>#}
-                </ul>
-            </div>
-        </div>
-        <div class="card mb-3">
-            <h5 class="card-header">API</h5>
-            <div class="card-body">
-                <ul class="list-unstyled mb-0">
-                    {#<li><a href="{{ path('api_get_article', {'id': 1}) }}">Get article by ID</a></li>#}
-                    {#<li><a href="{{ path('api_get_articles') }}">Get all articles</a></li>#}
-                    {#<li><a href="{{ path('api_add_article') }}">Add article</a></li>#}
-                </ul>
-            </div>
-        </div>
-    {% endblock %}
+<div class="card mb-3">
+    <h5 class="card-header">API</h5>
+    <div class="card-body">
+        <ul class="list-unstyled mb-0">
+            {#<li><a href="{{ path('api_get_article', {'id': 1}) }}">Get article by ID</a></li>#}
+            {#<li><a href="{{ path('api_get_articles') }}">Get all articles</a></li>#}
+            {#<li><a href="{{ path('api_add_article') }}">Add article</a></li>#}
+        </ul>
+    </div>
+</div>

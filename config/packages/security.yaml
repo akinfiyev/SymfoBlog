@@ -31,7 +31,7 @@ security:
                     - App\Security\ApiAuthenticator
                 entry_point: App\Security\UserCustomAuthenticator
             form_login:
-                login_path: app_login
+                login_path: user_registration
                 username_parameter: login[email]
                 password_parameter: login[password]
                 default_target_path: /

@@ -4,8 +4,7 @@ namespace App\EntityListener;
 
 use App\Entity\User;
 use App\Services\EncodeService;
-use Doctrine\ORM\Event\LifecycleEventArgs;
-use Doctrine\ORM\Mapping\PrePersist;
+use Doctrine\ORM\Mapping\PreFlush;
 
 class UserListener
 {
@@ -23,8 +22,8 @@ class UserListener
         $this->userService = $userService;
     }
 
-    /** @PrePersist */
-    public function prePersistHandler(User $user)
+    /** @PreFlush */
+    public function preFlushHandler(User $user)
     {
         $user->setPassword($this->userService->encodeUserPassword($user->getPlainPassword(), $user));
     }
