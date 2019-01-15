@@ -6,9 +6,7 @@ use App\Entity\User;
 use App\Form\User\EditProfileType;
 use App\Form\User\UserRegisterType;
 use App\Services\UploaderService;
-use mysql_xdevapi\Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -60,14 +58,14 @@ class UserController extends AbstractController
             $em->flush();
 
             return $this->render('user/edit_profile.html.twig', [
-                'user' => $this->getUser(),
+                'user' => $user,
                 'form' => $form->createView(),
                 'message' => 'success'
             ]);
         }
 
         return $this->render('user/edit_profile.html.twig', [
-            'user' => $this->getUser(),
+            'user' => $user,
             'form' => $form->createView()
         ]);
     }
@@ -77,10 +75,15 @@ class UserController extends AbstractController
      */
     public function roleBloggerRequestAction(Request $request)
     {
+        $this->getUser()->setHasRequestBloggerRole(true);
+        $this->getDoctrine()->getManager()->flush();
 
+        return $this->redirect($request
+            ->headers
+            ->get('referer'));
     }
 
-    public function showUserProfileSidebarAction(Request $request)
+    public function showUserProfileSidebarAction()
     {
         return $this->render('base/sidebar/user/profile.html.twig', [
             'user' => $this->getUser()
