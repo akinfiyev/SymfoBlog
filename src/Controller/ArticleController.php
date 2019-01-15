@@ -12,7 +12,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class ArticleController extends AbstractController
 {
     /**
-     * @Route("/", name="index")
+     * @Route("/articles", name="index")
      */
     public function indexAction(Request $request, ContainerInterface $container)
     {
