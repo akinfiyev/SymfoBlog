@@ -1,0 +1,56 @@
+{% extends 'base/admin_panel/base.html.twig' %}
+
+{% block title %}Admin panel - Edit user profile - {{ user.username }}{% endblock %}
+
+{% block body %}
+    <div class="container mt-4">
+    {{ form_start(form) }}
+    <div class="card mb-4">
+        <div class="card-body">
+            <h2 class="card-title">Edit user profile - {{ user.username }}</h2>
+            {% if message is defined and message == 'success' %}
+                <div class="alert alert-primary text-center" role="alert">
+                    Profile has been edited successful!
+                </div>
+            {% endif %}
+            <hr>
+            <div class="text-center mb-4">
+                {% if user.avatar is empty %}
+                    <div class="text-center mt-2 mb-2"><img src="{{ asset('images/no-avatar.svg') }}" alt="" width="100"
+                                                            height="100"></div>
+                    Set avatar
+                {% else %}
+                    <div class="text-center mt-2 mb-2"><img src="{{ asset('uploads/avatars/' ~ user.avatar) }}" alt=""
+                                                            width="100" height="100"></div>
+                    Change avatar
+                {% endif %}
+                <br>
+                {{ form_errors(form.avatar) }}
+                {{ form_widget(form.avatar) }}
+            </div>
+            <input type="text" class="form-control" value="ID: {{ user.id }}" disabled>
+            <input type="text" class="form-control" value="Roles: {{ user.roles|join }}" disabled>
+            {{ form_errors(form.username) }}
+            {{ form_widget(form.username) }}
+            {{ form_errors(form.email) }}
+            {{ form_widget(form.email) }}
+            {{ form_errors(form.plainPassword) }}
+            {{ form_widget(form.plainPassword) }}
+        </div>
+        <div class="card-footer text-muted">
+            <div class="row text-right pl-2 float-left">
+                <a href="{{ path('admin_panel_users') }}" class="btn btn-dark">Back to users list</a>
+            </div>
+            <div class="row pr-2 float-right">
+                <input type="submit" class="btn btn-success" value="Save changes">
+            </div>
+        </div>
+    </div>
+    {{ form_end(form) }}
+    </div>
+{% endblock %}
+
+
+
+
+

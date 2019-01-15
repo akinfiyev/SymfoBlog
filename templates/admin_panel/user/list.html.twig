@@ -22,9 +22,11 @@
                 <tr{% if user.hasRequestBloggerRole %} class="table-warning" title="This user want to be blogger"{% endif %}>
                     <td>
                         {% if user.avatar is empty %}
-                            <div class="text-center mt-2 mb-2"><img src="{{ asset('images/no-avatar.svg') }}" alt="" width="50" height="50"></div>
+                            <div class="text-center mt-2 mb-2"><img src="{{ asset('images/no-avatar.svg') }}" alt=""
+                                                                    width="50" height="50"></div>
                         {% else %}
-                            <div class="text-center mt-2 mb-2"><img src="{{ asset('uploads/avatars/' ~ user.avatar) }}" alt="" width="50" height="50"></div>
+                            <div class="text-center mt-2 mb-2"><img src="{{ asset('uploads/avatars/' ~ user.avatar) }}"
+                                                                    alt="" width="50" height="50"></div>
                         {% endif %}
                     </td>
                     <th scope="row" class="align-middle">{{ user.id }}</th>
@@ -35,13 +37,13 @@
                         {% if 'ROLE_BANNED' not in user.roles %}
                             {% if 'ROLE_BLOGGER' in user.roles %}
                                 <a class="btn btn-warning"
-                                   href="{{ path('make_user_blogger') }}?user_id={{ user.id }}"
+                                   href="{{ path('admin_panel_users_make_blogger', {'id': user.id}) }}"
                                    role="button">
                                     <i class="fa fa-times"></i> Delete blogger role
                                 </a>
                             {% else %}
                                 <a class="btn btn-success"
-                                   href="{{ path('make_user_blogger') }}?user_id={{ user.id }}"
+                                   href="{{ path('admin_panel_users_make_blogger', {'id': user.id}) }}"
                                    role="button">
                                     <i class="fa fa-plus"></i> Add blogger role
                                 </a>
@@ -51,13 +53,13 @@
                     <td class="align-middle">
                         {% if 'ROLE_BANNED' in user.roles %}
                             <a class="btn btn-warning"
-                               href="{{ path('ban_user') }}?user_id={{ user.id }}"
+                               href="{{ path('admin_panel_users_ban', {'id': user.id}) }}"
                                role="button">
                                 <i class="fa fa-level-up-alt"></i> Undo ban
                             </a>
                         {% else %}
                             <a class="btn btn-danger"
-                               href="{{ path('ban_user') }}?user_id={{ user.id }}"
+                               href="{{ path('admin_panel_users_ban', {'id': user.id}) }}"
                                role="button">
                                 <i class="fa fa-ban"></i> Ban
                             </a>
@@ -74,7 +76,11 @@
             {% endfor %}
             </tbody>
         </table>
-
+        {% if users|length == 0 %}
+            <div class="text-center">
+                Users not found
+            </div>
+        {% endif %}
         <div class="col-md-3 mx-auto">
             {{ knp_pagination_render(users) }}
         </div>

@@ -4,8 +4,12 @@ namespace App\Controller;
 
 use App\Entity\Article;
 use App\Entity\User;
+use App\Form\User\EditProfileType;
+use App\Services\UploaderService;
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -20,154 +24,165 @@ class AdminPanelController extends AbstractController
     }
 
     /**
-     * @Route("/admin/articles/", name="admin_articles")
+     * @Route("/admin/users/", name="admin_panel_users")
      */
-    public function adminPanelArticlesAction(Request $request, ContainerInterface $container)
+    public function usersListAction(Request $request, PaginatorInterface $paginator)
     {
-        $articles = $this->getDoctrine()
-            ->getRepository(Article::class)
-            ->findAll();
-
-        $paginator = $container->get('knp_paginator');
-        $articles = $paginator->paginate(
-            $articles,
-            $request->query->getInt('page', 1),
-            $request->query->getInt('limit', 5)
-        );
-
-        return $this->render('admin_panel/articles.html.twig', [
-            'articles' => $articles,
-        ]);
-    }
-
-    /**
-     * @Route("/admin/articles/approval/", name="admin_articles_unapproved")
-     */
-    public function articleApprovalAction(Request $request, ContainerInterface $container)
-    {
-        $articles = $this->getDoctrine()
-            ->getRepository(Article::class)
-            ->findBy(['isApproved' => false]);
-
-        $paginator = $container->get('knp_paginator');
-        $articles = $paginator->paginate(
-            $articles,
-            $request->query->getInt('page', 1),
-            $request->query->getInt('limit', 5)
-        );
-
-        return $this->render('admin_panel/articles_approval.html.twig', [
-            'articles' => $articles,
-        ]);
-    }
-
-    /**
-     * @Route("/admin/articles/approval/approve", name="article_approve")
-     */
-    public function articleApproveAction(Request $request)
-    {
-        $post_id = $request->get('post_id');
-        if ($post_id !== null) {
-            $em = $this->getDoctrine()->getManager();
-
-            $article = $em->getRepository(Article::class)
-                ->find($post_id);
-            if (!$article) {
-                throw $this->createNotFoundException('The article does not exist.');
-            }
-
-            $article->setIsApproved(true);
-            $em->merge($article);
-            $em->flush();
-
-            return $this->redirect($request->headers->get('referer'));
-        } else {
-            throw $this->createNotFoundException('The article does not exist.');
-        }
-    }
-
-    /**
-     * @Route("/admin/users/", name="users_list")
-     */
-    public function userListingAction(Request $request, ContainerInterface $container)
-    {
-        $users = $this->getDoctrine()
+        $query = $this->getDoctrine()
             ->getRepository(User::class)
-            ->findAll();
-
-        $paginator = $container->get('knp_paginator');
+            ->createQueryBuilder('user')
+            ->orderBy('user.id', 'ASC')
+            ->getQuery();
         $users = $paginator->paginate(
-            $users,
+            $query,
             $request->query->getInt('page', 1),
-            $request->query->getInt('limit', 5)
+            5
         );
-
-        return $this->render('admin_panel/users_list.html.twig', [
-            'users' => $users,
+        return $this->render('admin_panel/user/list.html.twig', [
+            'users' => $users
         ]);
     }
 
     /**
-     * @Route("/admin/users/make_blogger/", name="make_user_blogger")
+     * @Route("/admin/users/blogger_requests", name="admin_panel_users_blogger_requests")
      */
-    public function makeUserBloggerAction(Request $request)
+    public function usersListBloggerRequestsAction(Request $request, PaginatorInterface $paginator)
     {
-        $user_id = $request->get('user_id');
-        if ($user_id !== null) {
-            $em = $this->getDoctrine()->getManager();
-
-            $user = $em->getRepository(User::class)
-                ->find($user_id);
-            if (!$user) {
-                throw $this->createNotFoundException('The user does not exist.');
-            }
-
-            if (in_array('ROLE_BLOGGER', $user->getRoles())) {
-                $roles = $user->getRoles();
-                if (($key = array_search('ROLE_BLOGGER', $roles)) !== false) {
-                    unset($roles[$key]);
-                }
-                $user->setRoles($roles);
-            } else {
-                $roles = $user->getRoles();
-                $roles[] = 'ROLE_BLOGGER';
-                $user->setRoles($roles);
-            }
-            $em->merge($user);
-            $em->flush();
-
-            return $this->redirect($request->headers->get('referer'));
-        } else {
-            throw $this->createNotFoundException('The user does not exist.');
-        }
+        $query = $this->getDoctrine()
+            ->getRepository(User::class)
+            ->createQueryBuilder('user')
+            ->where('user.hasRequestBloggerRole = true')
+            ->orderBy('user.id', 'ASC')
+            ->getQuery();
+        $users = $paginator->paginate(
+            $query,
+            $request->query->getInt('page', 1),
+            5
+        );
+        return $this->render('admin_panel/user/list.html.twig', [
+            'users' => $users
+        ]);
     }
 
     /**
-     * @Route("/admin/users/ban/", name="ban_user")
+     * @Route("/admin/users/{id}/edit", methods={"GET", "POST"}, name="admin_panel_users_edit")
      */
-    public function banUserAction(Request $request)
+    public function usersEditAction(Request $request, User $user, UploaderService $uploaderService)
     {
-        $user_id = $request->get('user_id');
-        if ($user_id !== null) {
-            $em = $this->getDoctrine()->getManager();
+        $em = $this->getDoctrine()->getManager();
+        $user = $em->getRepository(User::class)->find($user);
+        $avatar = $user->getAvatar();
 
-            $user = $em->getRepository(User::class)
-                ->find($user_id);
-            if (!$user) {
-                throw $this->createNotFoundException('The user does not exist.');
-            }
-
-            if (in_array('ROLE_BANNED', $user->getRoles())) {
-                $user->setRoles(['ROLE_USER']);
+        $form = $this->createForm(EditProfileType::class, $user);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            if (empty($user->getAvatar())) {
+                $user->setAvatar($avatar);
             } else {
-                $user->setRoles(['ROLE_BANNED']);
+                $avatar = $uploaderService->upload(new UploadedFile($user->getAvatar(), 'avatar'));
+                $user->setAvatar($avatar);
             }
-            $em->merge($user);
             $em->flush();
 
-            return $this->redirect($request->headers->get('referer'));
-        } else {
-            throw $this->createNotFoundException('The user does not exist.');
+            return $this->render('admin_panel/user/edit_profile.html.twig', [
+                'user' => $user,
+                'form' => $form->createView(),
+                'message' => 'success'
+            ]);
         }
+
+        return $this->render('admin_panel/user/edit_profile.html.twig', [
+            'user' => $user,
+            'form' => $form->createView()
+        ]);
+    }
+
+    /**
+     * @Route("/admin/users/{id}/make_blogger", name="admin_panel_users_make_blogger")
+     */
+    public function usersMakeBloggerAction(Request $request, User $user)
+    {
+        $em = $this->getDoctrine()->getManager();
+        if (in_array('ROLE_BLOGGER', $roles = $user->getRoles())) {
+            if (($key = array_search('ROLE_BLOGGER', $roles)) !== false) {
+                unset($roles[$key]);
+            }
+            $user->setRoles($roles);
+        } else {
+            $roles[] = 'ROLE_BLOGGER';
+            $user->setHasRequestBloggerRole(null);
+            $user->setRoles($roles);
+        }
+        $em->flush();
+
+        return $this->redirect($request->headers->get('referer'));
+    }
+
+    /**
+     * @Route("/admin/users/{id}/ban/", name="admin_panel_users_ban")
+     */
+    public function usersBanAction(Request $request, User $user)
+    {
+        $em = $this->getDoctrine()->getManager();
+        if (in_array('ROLE_BANNED', $user->getRoles())) {
+            $user->setRoles(['ROLE_USER']);
+        } else {
+            $user->setRoles(['ROLE_BANNED']);
+        }
+        $em->flush();
+
+        return $this->redirect($request->headers->get('referer'));
+    }
+
+    /**
+     * @Route("/admin/articles/", name="admin_panel_articles")
+     */
+    public function articlesListAction(Request $request, PaginatorInterface $paginator)
+    {
+        $query = $this->getDoctrine()
+            ->getRepository(Article::class)
+            ->createQueryBuilder('article')
+            ->orderBy('article.id', 'DESC')
+            ->getQuery();
+        $articles = $paginator->paginate(
+            $query,
+            $request->query->getInt('page', 1),
+            5
+        );
+        return $this->render('admin_panel/articles/list.html.twig', [
+            'articles' => $articles
+        ]);
+    }
+
+    /**
+     * @Route("/admin/articles/unapproved", name="admin_panel_articles_unapproved")
+     */
+    public function articlesListUnapprovedAction(Request $request, PaginatorInterface $paginator)
+    {
+        $query = $this->getDoctrine()
+            ->getRepository(Article::class)
+            ->createQueryBuilder('article')
+            ->where('article.isApproved = false')
+            ->orderBy('article.id', 'DESC')
+            ->getQuery();
+        $articles = $paginator->paginate(
+            $query,
+            $request->query->getInt('page', 1),
+            5
+        );
+        return $this->render('admin_panel/articles/list.html.twig', [
+            'articles' => $articles
+        ]);
+    }
+
+    /**
+     * @Route("/admin/articles/{id}/approve", name="admin_panel_articles_approve")
+     */
+    public function articleApproveAction(Request $request, Article $article)
+    {
+        $article->setIsApproved(true);
+        $this->getDoctrine()->getManager()->flush();
+
+        return $this->redirect($request->headers->get('referer'));
     }
 }
