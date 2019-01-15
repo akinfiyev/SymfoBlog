@@ -33,7 +33,7 @@ class ArticleController extends AbstractController
     }
 
     /**
-     * @Route("/post/new", name="post_article")
+     * @Route("/post/new", name="article_add")
      */
     public function postAction(Request $request)
     {
