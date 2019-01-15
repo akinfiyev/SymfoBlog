@@ -25,6 +25,7 @@ class UserListener
     /** @PreFlush */
     public function preFlushHandler(User $user)
     {
-        $user->setPassword($this->userService->encodeUserPassword($user->getPlainPassword(), $user));
+        if ($user->getPlainPassword() != null)
+            $user->setPassword($this->userService->encodeUserPassword($user->getPlainPassword(), $user));
     }
 }
