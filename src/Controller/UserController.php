@@ -58,6 +58,12 @@ class UserController extends AbstractController
                 $user->setAvatar($avatar);
             }
             $em->flush();
+
+            return $this->render('user/edit_profile.html.twig', [
+                'user' => $this->getUser(),
+                'form' => $form->createView(),
+                'message' => 'success'
+            ]);
         }
 
         return $this->render('user/edit_profile.html.twig', [
