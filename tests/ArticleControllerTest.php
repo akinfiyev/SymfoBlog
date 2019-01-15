@@ -27,8 +27,5 @@ class ArticleControllerTest extends WebTestCase
 
         $client->request('POST', '/articles/{id}/edit');
         $this->assertEquals(302, $client->getResponse()->getStatusCode());
-
-        $client->request('GET', '/articles/{id}/delete');
-        $this->assertEquals(302, $client->getResponse()->getStatusCode());
     }
 }

@@ -9,7 +9,7 @@ class UserControllerTest extends WebTestCase
     public function testRegistration()
     {
         $client = static::createClient();
-        $crawler = $client->request('GET', '/register');
+        $crawler = $client->request('GET', '/registration');
         $this->assertEquals(200, $client->getResponse()->getStatusCode());
 
         $crawler->selectButton('Submit');

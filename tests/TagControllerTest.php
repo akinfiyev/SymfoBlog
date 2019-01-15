@@ -9,7 +9,7 @@ class TagControllerTest extends WebTestCase
     public function testRoutes()
     {
         $client = static::createClient();
-        $client->request('GET', '/tag');
+        $client->request('GET', '/tag/{name}/show');
         $this->assertEquals(200, $client->getResponse()->getStatusCode());
     }
 }
