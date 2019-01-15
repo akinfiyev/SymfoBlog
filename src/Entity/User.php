@@ -89,7 +89,7 @@ class User implements UserInterface, \JsonSerializable
     private $comments;
 
     /**
-     * @var File
+     * @var string
      * @ORM\Column(type="string", nullable=true)
      *
      * @Assert\File(mimeTypes={"image/png", "image/jpeg"})
@@ -192,8 +192,7 @@ class User implements UserInterface, \JsonSerializable
      */
     public function eraseCredentials()
     {
-        // If you store any temporary, sensitive data on the user, clear it here
-        // $this->plainPassword = null;
+         $this->plainPassword = null;
     }
 
     /**
@@ -285,7 +284,6 @@ class User implements UserInterface, \JsonSerializable
     {
         if ($this->comments->contains($comment)) {
             $this->comments->removeElement($comment);
-            // set the owning side to null (unless already changed)
             if ($comment->getAuthor() === $this) {
                 $comment->setAuthor(null);
             }
