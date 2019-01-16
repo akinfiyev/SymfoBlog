@@ -22,13 +22,19 @@ security:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
+        api:
+          pattern: ^/api/
+          provider: app_user_chain_provider
+          anonymous: true
+          guard:
+            authenticators:
+              - App\Security\ApiAuthenticator
         main:
             provider: app_user_chain_provider
             anonymous: true
             guard:
                 authenticators:
                     - App\Security\UserCustomAuthenticator
-                    - App\Security\ApiAuthenticator
                 entry_point: App\Security\UserCustomAuthenticator
             form_login:
                 login_path: user_registration
@@ -53,6 +59,7 @@ security:
         - { path: ^/like, roles: ROLE_USER }
         - { path: ^/articles/add, roles: ROLE_BLOGGER }
         - { path: ^/admin, roles: ROLE_ADMIN }
+        - { path: ^/api, roles: ROLE_USER }
 
     role_hierarchy:
             ROLE_ADMIN: ROLE_USER, ROLE_BLOGGER
