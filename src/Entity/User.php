@@ -331,7 +331,10 @@ class User implements UserInterface, \JsonSerializable
         return [
             'id' => $this->getId(),
             'username' => $this->getUsername(),
+            'email' => $this->getEmail(),
             'roles' => $this->getRoles(),
+            'avatar' => $this->getAvatar(),
+            'api_token' => $this->getApiToken()
         ];
     }
 
