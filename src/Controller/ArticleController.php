@@ -3,39 +3,46 @@
 namespace App\Controller;
 
 use App\Entity\Article;
+use App\Entity\Comment;
 use App\Form\Article\AddArticleType;
+use App\Services\ArticleService;
+use App\Services\UploaderService;
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
 class ArticleController extends AbstractController
 {
     /**
-     * @Route("/articles", name="index")
+     * @Route("/articles", name="articles")
      */
-    public function indexAction(Request $request, ContainerInterface $container)
+    public function listAction(Request $request, PaginatorInterface $paginator)
     {
-        $articles = $this->getDoctrine()
+        $query = $this->getDoctrine()
             ->getRepository(Article::class)
-            ->findBy(['isApproved' => true], ['id' => 'DESC']);
-
-        $paginator = $container->get('knp_paginator');
+            ->createQueryBuilder('article')
+            ->where('article.isDeleted = false')
+            ->andWhere('article.isApproved = true')
+            ->orderBy('article.id', 'DESC')
+            ->getQuery();
         $articles = $paginator->paginate(
-            $articles,
+            $query,
             $request->query->getInt('page', 1),
-            $request->query->getInt('limit', 5)
+            5
         );
 
-        return $this->render('article/index.html.twig', [
-            'articles' => $articles
+        return $this->render('article/list.html.twig', [
+            'articles' => $articles,
         ]);
     }
 
     /**
-     * @Route("/post/new", name="article_add")
+     * @Route("/articles/add", name="articles_add")
+     * @throws \Exception
      */
-    public function postAction(Request $request)
+    public function addAction(Request $request, UploaderService $uploaderService, ArticleService $articleService)
     {
         $article = new Article();
 
@@ -43,25 +50,41 @@ class ArticleController extends AbstractController
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
+            $em = $this->getDoctrine()->getManager();
             $article->setAuthor($this->getUser())
                 ->setCreatedAt(new \DateTime())
                 ->setIsApproved(false);
-//            $tags = $articleService->generateTags($article->getTagsInput(), $article);
-//
-            $em = $this->getDoctrine()->getManager();
-//            if ($tags !== null) {
-//                foreach ($tags as $tag) {
-//                    $em->persist($tag);
-//                }
-//            }
+            if (!empty($article->getThumbnail())) {
+                $thumbnail = $uploaderService->upload(new UploadedFile($article->getThumbnail(), 'thumbnail'));
+                $article->setThumbnail($thumbnail);
+            }
+            if (!empty($article->getPlainTags())) {
+                $tags = $articleService->parseTags($article->getPlainTags(), $article);
+                if ($tags != null) {
+                    foreach ($tags as $tag) {
+                        $em->persist($tag);
+                    }
+                }
+            }
             $em->persist($article);
             $em->flush();
 
-            return $this->redirectToRoute('index');
+            return $this->redirectToRoute('articles');
         }
 
-        return $this->render('article/new.html.twig', [
-            'form' => $form->createView(),
+        return $this->render('article/add.html.twig', [
+            'form' => $form->createView()
+        ]);
+    }
+
+    /**
+     * @Route("/articles/{id}/show", name="articles_show")
+     */
+    public function showAction(Request $request, Article $article)
+    {
+        return $this->render('article/show.html.twig', [
+            'request' => $request,
+            'article' => $article
         ]);
     }
 }

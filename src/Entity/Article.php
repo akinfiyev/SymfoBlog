@@ -9,6 +9,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\ArticleRepository")
+ * @ORM\EntityListeners({"App\EntityListener\ArticleListener"})
  */
 class Article implements \JsonSerializable
 {
@@ -76,6 +77,7 @@ class Article implements \JsonSerializable
      * @ORM\OneToMany(targetEntity="App\Entity\Tag", mappedBy="article")
      */
     private $tags;
+    private $plainTags;
 
     /**
      * @var bool
@@ -83,7 +85,18 @@ class Article implements \JsonSerializable
      */
     private $isApproved;
 
-    private $tagsInput;
+    /**
+     * @var string
+     * @ORM\Column(type="string", nullable=true)
+     *
+     * @Assert\File(mimeTypes={"image/png", "image/jpeg"})
+     */
+    private $thumbnail;
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $isDeleted;
 
     public function __construct()
     {
@@ -235,14 +248,14 @@ class Article implements \JsonSerializable
         return $this;
     }
 
-    public function getTagsInput(): ?string
+    public function getPlainTags(): ?string
     {
-        return $this->tagsInput;
+        return $this->plainTags;
     }
 
-    public function setTagsInput(?string $tagsInput): self
+    public function setPlainTags(?string $plainTags): self
     {
-        $this->tagsInput = $tagsInput;
+        $this->plainTags = $plainTags;
 
         return $this;
     }
@@ -259,6 +272,24 @@ class Article implements \JsonSerializable
         return $this;
     }
 
+    /**
+     * @return string
+     */
+    public function getThumbnail(): ?string
+    {
+        return $this->thumbnail;
+    }
+
+    /**
+     * @param string $thumbnail
+     */
+    public function setThumbnail(?string $thumbnail): self
+    {
+        $this->thumbnail = $thumbnail;
+
+        return $this;
+    }
+
     public function jsonSerialize()
     {
         return [
@@ -269,5 +300,17 @@ class Article implements \JsonSerializable
             'isApproved' => $this->isApproved,
             'author_id' => $this->getAuthor()->getId(),
         ];
+    }
+
+    public function getIsDeleted(): ?bool
+    {
+        return $this->isDeleted;
+    }
+
+    public function setIsDeleted(bool $isDeleted): self
+    {
+        $this->isDeleted = $isDeleted;
+
+        return $this;
     }
 }

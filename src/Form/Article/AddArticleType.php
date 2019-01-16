@@ -10,6 +10,7 @@ namespace App\Form\Article;
 
 use App\Entity\Article;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -30,11 +31,14 @@ class AddArticleType extends AbstractType
                     'placeholder' => 'Article text'],
                 'label_attr' => ['class' => 'sr-only'],
             ])
-            ->add('tagsInput', TextType::class, [
+            ->add('plainTags', TextType::class, [
                 'attr' => ['class' => 'form-control',
                     'placeholder' => 'Tags via \', \' '],
                 'label_attr' => ['class' => 'sr-only'],
-            ]);
+            ])
+            ->add('thumbnail', FileType::class, [
+                'data_class' => null
+            ]);;
     }
 
     public function configureOptions(OptionsResolver $resolver)
