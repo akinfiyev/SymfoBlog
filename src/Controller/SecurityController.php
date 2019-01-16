@@ -5,7 +5,6 @@ namespace App\Controller;
 use App\Entity\User;
 use App\Form\Security\LoginType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
 class SecurityController extends AbstractController
@@ -16,7 +15,6 @@ class SecurityController extends AbstractController
         $user->setEmail($authenticationUtils->getLastUsername());
 
         $error = $authenticationUtils->getLastAuthenticationError();
-
         $form = $this->createForm(LoginType::class, $user, [
             'action' => $this->generateUrl('login_check')
         ]);
