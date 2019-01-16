@@ -20,6 +20,9 @@ class AppFixtures extends Fixture
         $this->passwordEncoder = $passwordEncoder;
     }
 
+    /**
+     * @throws \Exception
+     */
     public function load(ObjectManager $manager)
     {
         $this->loadUsers($manager);
@@ -66,6 +69,9 @@ class AppFixtures extends Fixture
         }
     }
 
+    /**
+     * @throws \Exception
+     */
     public function loadArticles(ObjectManager $manager)
     {
         for ($i = 0; $i < 15; $i++) {
@@ -74,12 +80,16 @@ class AppFixtures extends Fixture
                 ->setText('Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.')
                 ->setCreatedAt(new \DateTime())
                 ->setAuthor($this->getReference('user_blogger'))
+                ->setThumbnail('fixtures/thumbnail-' . ($i+1) . '.jpg')
                 ->setIsApproved($i % 2 == 0 ? true : false);
             $manager->persist($article);
             $this->addReference('article_' . $i, $article);
         }
     }
 
+    /**
+     * @throws \Exception
+     */
     public function loadComments(ObjectManager $manager)
     {
         for ($i = 0; $i < 15; $i++) {
@@ -97,6 +107,9 @@ class AppFixtures extends Fixture
         }
     }
 
+    /**
+     * @throws \Exception
+     */
     public function loadLikes(ObjectManager $manager)
     {
         for ($i = 0; $i < 15; $i++) {
@@ -111,6 +124,9 @@ class AppFixtures extends Fixture
         }
     }
 
+    /**
+     * @throws \Exception
+     */
     public function loadTags(ObjectManager $manager)
     {
         $tagsNames = ['футбол', 'symfony', 'blog', 'admin', 'doctor-mom', 'homework', 'server', 'localhost', 'bitcoin', 'eKreative', 'Lektorium', 'friend', 'work', 'hello', 'burger', 'white paper', 'book', 'deal', 'php'];
