@@ -8,19 +8,19 @@
     <div class="card mb-4">
         <div class="card-body">
             <h2 class="card-title">Edit user profile - {{ user.username }}</h2>
+            <hr>
             {% if message is defined and message == 'success' %}
                 <div class="alert alert-primary text-center" role="alert">
                     Profile has been edited successful!
                 </div>
             {% endif %}
-            <hr>
             <div class="text-center mb-4">
                 {% if user.avatar is empty %}
                     <div class="text-center mt-2 mb-2"><img src="{{ asset('images/no-avatar.svg') }}" alt="" width="100"
                                                             height="100"></div>
                     Set avatar
                 {% else %}
-                    <div class="text-center mt-2 mb-2"><img src="{{ asset('uploads/avatars/' ~ user.avatar) }}" alt=""
+                    <div class="text-center mt-2 mb-2"><img src="{{ asset('uploads/images/' ~ user.avatar) }}" alt=""
                                                             width="100" height="100"></div>
                     Change avatar
                 {% endif %}

@@ -3,12 +3,14 @@
 namespace App\Controller;
 
 use App\Entity\Article;
+use App\Entity\Comment;
 use App\Entity\User;
+use App\Form\Article\AddArticleType;
 use App\Form\User\EditProfileType;
+use App\Services\ArticleService;
 use App\Services\UploaderService;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -142,6 +144,7 @@ class AdminPanelController extends AbstractController
         $query = $this->getDoctrine()
             ->getRepository(Article::class)
             ->createQueryBuilder('article')
+            ->where('article.isDeleted = false')
             ->orderBy('article.id', 'DESC')
             ->getQuery();
         $articles = $paginator->paginate(
@@ -149,7 +152,7 @@ class AdminPanelController extends AbstractController
             $request->query->getInt('page', 1),
             5
         );
-        return $this->render('admin_panel/articles/list.html.twig', [
+        return $this->render('admin_panel/article/list.html.twig', [
             'articles' => $articles
         ]);
     }
@@ -162,7 +165,8 @@ class AdminPanelController extends AbstractController
         $query = $this->getDoctrine()
             ->getRepository(Article::class)
             ->createQueryBuilder('article')
-            ->where('article.isApproved = false')
+            ->where('article.isDeleted = false')
+            ->andWhere('article.isApproved = false')
             ->orderBy('article.id', 'DESC')
             ->getQuery();
         $articles = $paginator->paginate(
@@ -170,8 +174,84 @@ class AdminPanelController extends AbstractController
             $request->query->getInt('page', 1),
             5
         );
-        return $this->render('admin_panel/articles/list.html.twig', [
+        return $this->render('admin_panel/article/list.html.twig', [
             'articles' => $articles
+        ]);
+    }
+
+    /**
+     * @Route("/admin/articles/add", methods={"GET","POST"}, name="admin_panel_articles_add")
+     * @throws \Exception
+     */
+    public function articleAddAction(Request $request, UploaderService $uploaderService, ArticleService $articleService)
+    {
+        $article = new Article();
+
+        $form = $this->createForm(AddArticleType::class, $article);
+
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $em = $this->getDoctrine()->getManager();
+            $article->setAuthor($this->getUser())
+                ->setCreatedAt(new \DateTime())
+                ->setIsApproved(false);
+            if (!empty($article->getThumbnail())) {
+                $thumbnail = $uploaderService->upload(new UploadedFile($article->getThumbnail(), 'thumbnail'));
+                $article->setThumbnail($thumbnail);
+            }
+            if (!empty($article->getPlainTags())) {
+                $tags = $articleService->parseTags($article->getPlainTags(), $article);
+                if ($tags != null) {
+                    foreach ($tags as $tag) {
+                        $em->persist($tag);
+                    }
+                }
+            }
+            $em->persist($article);
+            $em->flush();
+
+            return $this->redirectToRoute('admin_panel_articles');
+        }
+
+        return $this->render('admin_panel/article/add.html.twig', [
+            'form' => $form->createView()
+        ]);
+    }
+
+    /**
+     * @Route("/admin/articles/{id}/edit", name="admin_panel_articles_edit")
+     */
+    public function articleEditAction(Request $request, Article $article, UploaderService $uploaderService, ArticleService $articleService)
+    {
+        $savedThumbnail = $articleService->articlePreEdit($article);
+
+        $form = $this->createForm(AddArticleType::class, $article);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $em = $this->getDoctrine()->getManager();
+            $articleService->articleThumbnailEdit($article, $savedThumbnail, $uploaderService);
+            if (!empty($article->getPlainTags())) {
+                $tags = $articleService->parseTags($article->getPlainTags(), $article);
+                if ($tags != null) {
+                    foreach ($tags as $tag) {
+                        if (!$articleService->checkIfTagExist($tag, $em))
+                            $em->persist($tag);
+                    }
+                }
+            }
+            $em->persist($article);
+            $em->flush();
+
+            return $this->render('admin_panel/article/edit.html.twig', [
+                'article' => $article,
+                'form' => $form->createView(),
+                'message' => 'success'
+            ]);
+        }
+
+        return $this->render('admin_panel/article/edit.html.twig', [
+            'article' => $article,
+            'form' => $form->createView()
         ]);
     }
 
@@ -181,6 +261,49 @@ class AdminPanelController extends AbstractController
     public function articleApproveAction(Request $request, Article $article)
     {
         $article->setIsApproved(true);
+        $this->getDoctrine()->getManager()->flush();
+
+        return $this->redirect($request->headers->get('referer'));
+    }
+
+    /**
+     * @Route("/admin/articles/{id}/delete", name="admin_panel_articles_delete")
+     */
+    public function articleDeleteAction(Request $request, Article $article)
+    {
+        $article->setIsDeleted(true);
+        $this->getDoctrine()->getManager()->flush();
+
+        return $this->redirect($request->headers->get('referer'));
+    }
+
+    /**
+     * @Route("/admin/comments", name="admin_panel_comments")
+     */
+    public function commentsListAction(Request $request, PaginatorInterface $paginator)
+    {
+        $query = $this->getDoctrine()
+            ->getRepository(Comment::class)
+            ->createQueryBuilder('comment')
+            ->where('comment.isDeleted = false')
+            ->orderBy('comment.id', 'DESC')
+            ->getQuery();
+        $comments = $paginator->paginate(
+            $query,
+            $request->query->getInt('page', 1),
+            5
+        );
+        return $this->render('admin_panel/comment/list.html.twig', [
+            'comments' => $comments
+        ]);
+    }
+
+    /**
+     * @Route("/admin/comments/{id}/delete", name="admin_panel_comments_delete")
+     */
+    public function commentsDeleteAction(Request $request, Comment $comment)
+    {
+        $comment->setIsDeleted(true);
         $this->getDoctrine()->getManager()->flush();
 
         return $this->redirect($request->headers->get('referer'));
