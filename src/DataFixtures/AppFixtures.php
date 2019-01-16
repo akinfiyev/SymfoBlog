@@ -10,6 +10,7 @@ use App\Entity\UserLike;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Ramsey\Uuid\Uuid;
 
 class AppFixtures extends Fixture
 {
@@ -39,7 +40,8 @@ class AppFixtures extends Fixture
         $user_blogger->setEmail('blogger@gmail.com')
             ->setUsername('blogger')
             ->setRoles(['ROLE_BLOGGER'])
-            ->setPlainPassword('1111');
+            ->setPlainPassword('1111')
+            ->setApiToken($uuid4 = Uuid::uuid4());
         $manager->persist($user_blogger);
         $this->addReference('user_blogger', $user_blogger);
 
@@ -47,7 +49,8 @@ class AppFixtures extends Fixture
         $user_admin->setEmail('admin@gmail.com')
             ->setUsername('admin')
             ->setRoles(['ROLE_ADMIN'])
-            ->setPlainPassword('admin');
+            ->setPlainPassword('admin')
+            ->setApiToken($uuid4 = Uuid::uuid4());
         $manager->persist($user_admin);
         $this->addReference('user_admin', $user_admin);
 
@@ -55,7 +58,8 @@ class AppFixtures extends Fixture
         $user_test->setEmail('test@gmail.com')
             ->setUsername('test')
             ->setRoles(['ROLE_USER'])
-            ->setPlainPassword('test');
+            ->setPlainPassword('test')
+            ->setApiToken($uuid4 = Uuid::uuid4());
         $manager->persist($user_test);
 
         for ($i = 0; $i < 15; $i++) {
@@ -63,7 +67,8 @@ class AppFixtures extends Fixture
             $user->setEmail('user' . $i . '@gmail.com')
                 ->setUsername('user' . $i)
                 ->setRoles(['ROLE_USER'])
-                ->setPlainPassword('1111');
+                ->setPlainPassword('1111')
+                ->setApiToken($uuid4 = Uuid::uuid4());
             $manager->persist($user);
             $this->addReference('user_' . $i, $user);
         }

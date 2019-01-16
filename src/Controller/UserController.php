@@ -10,6 +10,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
+use Ramsey\Uuid\Uuid;
 
 class UserController extends AbstractController
 {
@@ -23,7 +24,8 @@ class UserController extends AbstractController
         $form = $this->createForm(UserRegisterType::class, $user);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $user->setRoles(['ROLE_USER']);
+            $user->setRoles(['ROLE_USER'])
+                ->setApiToken($uuid4 = Uuid::uuid4());
             $em = $this->getDoctrine()->getManager();
             $em->persist($user);
             $em->flush();

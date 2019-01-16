@@ -100,6 +100,13 @@ class User implements UserInterface, \JsonSerializable
      */
     private $hasRequestBloggerRole;
 
+    /**
+     * @var string
+     *
+     * @ORM\Column(type="string", unique=true)
+     */
+    private $apiToken;
+
     public function __construct()
     {
         $this->articles = new ArrayCollection();
@@ -301,6 +308,22 @@ class User implements UserInterface, \JsonSerializable
         $this->avatar = $avatar;
 
         return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getApiToken(): string
+    {
+        return $this->apiToken;
+    }
+
+    /**
+     * @param string $apiToken
+     */
+    public function setApiToken(string $apiToken): void
+    {
+        $this->apiToken = $apiToken;
     }
 
     public function jsonSerialize()
