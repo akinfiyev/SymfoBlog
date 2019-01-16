@@ -18,14 +18,5 @@ class ArticleControllerTest extends WebTestCase
 
         $client->request('POST', '/articles/add');
         $this->assertEquals(302, $client->getResponse()->getStatusCode());
-
-        $client->request('GET', '/articles/{id}/show');
-        $this->assertEquals(200, $client->getResponse()->getStatusCode());
-
-        $client->request('GET', '/articles/{id}/edit');
-        $this->assertEquals(302, $client->getResponse()->getStatusCode());
-
-        $client->request('POST', '/articles/{id}/edit');
-        $this->assertEquals(302, $client->getResponse()->getStatusCode());
     }
 }

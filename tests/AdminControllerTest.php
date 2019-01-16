@@ -34,13 +34,7 @@ class AdminControllerTest extends WebTestCase
         $client->request('GET', '/admin/users');
         $this->assertEquals(302, $client->getResponse()->getStatusCode());
 
-        $client->request('GET', '/admin/users/add');
-        $this->assertEquals(302, $client->getResponse()->getStatusCode());
-
-        $client->request('POST', '/admin/users/add');
-        $this->assertEquals(302, $client->getResponse()->getStatusCode());
-
-        $client->request('GET', '/admin/users/{id}/show');
+        $client->request('GET', '/admin/users');
         $this->assertEquals(302, $client->getResponse()->getStatusCode());
 
         $client->request('GET', '/admin/users/{id}/edit');
@@ -49,16 +43,10 @@ class AdminControllerTest extends WebTestCase
         $client->request('POST', '/admin/users/{id}/edit');
         $this->assertEquals(302, $client->getResponse()->getStatusCode());
 
-        $client->request('GET', '/admin/users/{id}/delete');
-        $this->assertEquals(302, $client->getResponse()->getStatusCode());
-
         $client->request('GET', '/admin/comments');
         $this->assertEquals(302, $client->getResponse()->getStatusCode());
 
         $client->request('GET', '/admin/comments/{id}/delete');
-        $this->assertEquals(302, $client->getResponse()->getStatusCode());
-
-        $client->request('GET', '/admin/tags');
         $this->assertEquals(302, $client->getResponse()->getStatusCode());
     }
 }
