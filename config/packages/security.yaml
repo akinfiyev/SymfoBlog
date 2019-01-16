@@ -59,7 +59,6 @@ security:
         - { path: ^/like, roles: ROLE_USER }
         - { path: ^/articles/add, roles: ROLE_BLOGGER }
         - { path: ^/admin, roles: ROLE_ADMIN }
-        - { path: ^/api, roles: ROLE_USER }
 
     role_hierarchy:
             ROLE_ADMIN: ROLE_USER, ROLE_BLOGGER
