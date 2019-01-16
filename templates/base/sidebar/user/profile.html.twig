@@ -3,7 +3,7 @@
     <div class="text-center mt-2 mb-2"><img src="{{ asset('images/no-avatar.svg') }}" alt="" width="100" height="100"></div>
     <a href="{{ path('user_profile_edit') }}"><div class="btn w-100">Set avatar</div></a>
 {% else %}
-    <div class="text-center mt-2 mb-2"><img src="{{ asset('uploads/avatars/' ~ user.avatar) }}" alt="" width="100" height="100"></div>
+    <div class="text-center mt-2 mb-2"><img src="{{ asset('uploads/images/' ~ user.avatar) }}" alt="" width="100" height="100"></div>
     <a href="{{ path('user_profile_edit') }}"><div class="btn w-100">Change avatar</div></a>
 {% endif %}
 <hr class="mt-0">
@@ -13,7 +13,7 @@
     <a href="{{ path('admin_panel') }}"><div class="btn btn-dark w-100">Admin panel</div></a>
 {% endif %}
 {% if is_granted('ROLE_BLOGGER') %}
-    <a href="{{ path('article_add') }}"><div class="btn btn-light w-100">Add article</div></a>
+    <a href="{{ path('articles_add') }}"><div class="btn btn-light w-100">Add article</div></a>
 {% endif %}
 <a href="{{ path('user_profile_edit') }}"><div class="btn btn-light w-100">Edit profile</div></a>
 {% if not is_granted('ROLE_BLOGGER') and not user.hasRequestBloggerRole %}

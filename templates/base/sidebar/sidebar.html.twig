@@ -15,6 +15,13 @@
 {% endif %}
 
 <div class="card mb-3">
+    <h5 class="card-header">Tags</h5>
+    <div class="card-body">
+        {{ render(controller('App\\Controller\\TagController::allTagsAction')) }}
+    </div>
+</div>
+
+<div class="card mb-3">
     <h5 class="card-header">API</h5>
     <div class="card-body">
         <ul class="list-unstyled mb-0">
