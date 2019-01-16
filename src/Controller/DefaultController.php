@@ -10,10 +10,8 @@ class DefaultController extends AbstractController
     /**
      * @Route("/", name="default")
      */
-    public function index()
+    public function indexAction()
     {
-        return $this->render('default/index.html.twig', [
-            'controller_name' => 'DefaultController',
-        ]);
+        return $this->redirectToRoute('articles');
     }
 }
