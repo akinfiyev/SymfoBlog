@@ -3,7 +3,9 @@
 namespace App\Controller\Api;
 
 use App\Entity\Article;
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\SerializerInterface;
 
@@ -20,27 +22,28 @@ class ArticleController extends AbstractController
     }
 
     /**
-     * @Route("api/articles", name="api_articles")
+     * @Route("/api/articles/{page}", methods={"GET"}, name="api_articles")
      */
-    public function showArticlesAction()
+    public function showArticlesAction(Request $request, PaginatorInterface $paginator, string $page)
     {
-        $articles = $this->getDoctrine()
+        $query = $this->getDoctrine()
             ->getRepository(Article::class)
-            ->findAll();
+            ->createQueryBuilder('article')
+            ->where('article.isApproved = true')
+            ->andWhere('article.isDeleted = false')
+            ->orderBy('article.id', 'DESC')
+            ->getQuery();
+        $articles = $paginator->paginate(
+            $query,
+            $request->query->getInt('page', $page),
+            5
+        );
 
-        return $this->json(['articles' => $articles]);
+        return $this->json($articles);
     }
 
     /**
-     * @Route("api/articles/tag/{tagName}/show", name="api_articles_show")
-     */
-    public function showArticlesByTagAction(String $tagName)
-    {
-
-    }
-
-    /**
-     * @Route("api/articles/{id}/show", name="api_articles_show")
+     * @Route("/api/articles/{id}/show", methods={"GET"}, name="api_articles_show")
      */
     public function showArticleByIdAction(Article $article)
     {

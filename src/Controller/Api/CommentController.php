@@ -8,8 +8,15 @@
 
 namespace App\Controller\Api;
 
+use App\Entity\Article;
+use App\Entity\Comment;
+use App\Entity\User;
+use App\Exception\JsonHttpException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\SerializerInterface;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class CommentController extends AbstractController
 {
@@ -18,18 +25,49 @@ class CommentController extends AbstractController
      */
     private $serializer;
 
-    public function __construct(SerializerInterface $serializer)
+    /**
+     * @var ValidatorInterface
+     */
+    private $validator;
+
+    public function __construct(SerializerInterface $serializer, ValidatorInterface $validator)
     {
         $this->serializer = $serializer;
+        $this->validator = $validator;
     }
 
-    public function getCommentsAction()
+    /**
+     * @Route("/api/comment/{article}/add", methods={"POST"}, name="api_comment_add")
+     * @throws \Exception
+     */
+    public function addCommentAction(Request $request, Article $article)
     {
+        if (!$content = $request->getContent())
+            throw new JsonHttpException(400, 'Bad Request');
 
-    }
+        $em = $this->getDoctrine()->getManager();
+        $apiToken = $request->headers->get('x-api-key');
 
-    public function addCommentAction()
-    {
+        /** @var User $user */
+        $user = $em->getRepository(User::class)
+            ->findOneBy(['apiToken' => $apiToken]);
+        if (!$user)
+            throw new JsonHttpException(400, 'Authentication error');
 
+        /* @var Comment $comment */
+        $comment = $this->serializer->deserialize($request->getContent(), Comment::class, 'json');
+        $comment->setAuthor($user)
+            ->setArticle($article)
+            ->setCreatedAt(new \DateTime())
+            ->setIsDeleted(false);
+
+        $errors = $this->validator->validate($comment);
+        if (count($errors))
+            throw new JsonHttpException(400, (string) $errors->get(0)->getPropertyPath() . ': ' . (string) $errors->get(0)->getMessage());
+
+        $this->getDoctrine()->getManager()->persist($comment);
+        $this->getDoctrine()->getManager()->flush();
+
+        return $this->json($comment);
     }
 }

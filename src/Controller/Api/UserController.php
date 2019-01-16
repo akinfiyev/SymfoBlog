@@ -18,6 +18,10 @@ class UserController extends AbstractController
      * @var SerializerInterface
      */
     private $serializer;
+
+    /**
+     * @var ValidatorInterface
+     */
     private $validator;
 
     public function __construct(SerializerInterface $serializer, ValidatorInterface $validator)
@@ -32,9 +36,8 @@ class UserController extends AbstractController
      */
     public function registrationUserAction(Request $request)
     {
-        if (!$content = $request->getContent()) {
+        if (!$content = $request->getContent())
             throw new JsonHttpException(400, 'Bad Request');
-        }
 
         /* @var User $user */
         $user = $this->serializer->deserialize($request->getContent(), User::class, 'json');
@@ -42,9 +45,8 @@ class UserController extends AbstractController
             ->setApiToken(Uuid::uuid4());
 
         $errors = $this->validator->validate($user);
-        if (count($errors)) {
+        if (count($errors))
             throw new JsonHttpException(400, (string) $errors->get(0)->getPropertyPath() . ': ' . (string) $errors->get(0)->getMessage());
-        }
 
         $this->getDoctrine()->getManager()->persist($user);
         $this->getDoctrine()->getManager()->flush();
@@ -61,18 +63,20 @@ class UserController extends AbstractController
         if (!$content = $request->getContent())
             throw new JsonHttpException(400, 'Bad Request');
 
-        $data = json_decode($request->getContent(), true);
-        if (!isset($data['email']) or !isset($data['plainPassword']))
+        /* @var User $user */
+        $user = $this->serializer->deserialize($request->getContent(), User::class, 'json');
+        $plainPassword = $user->getPlainPassword();
+        if (empty($plainPassword) or empty($user->getEmail()))
             throw new JsonHttpException(400, 'Bad Request');
 
         $user = $this->getDoctrine()
             ->getManager()
             ->getRepository(User::class)
-            ->findOneBy(['email' => $data['email']]);
+            ->findOneBy(['email' => $user->getEmail()]);
         if (!$user)
-            throw new JsonHttpException(400, 'User not found');
+            throw new JsonHttpException(400, 'Authentication error');
 
-        if($passwordEncoder->isPasswordValid($user,$data['plainPassword'])){
+        if($passwordEncoder->isPasswordValid($user,$plainPassword)){
             $user->setApiToken(Uuid::uuid4());
             $this->getDoctrine()->getManager()->flush();
 
@@ -83,24 +87,20 @@ class UserController extends AbstractController
     }
 
     /**
-     * @Route("/api/user/profile", methods={"POST"}, name="api_user_profile")
+     * @Route("/api/user/profile", methods={"GET"}, name="api_user_profile")
      * @throws \Exception
      */
     public function showProfileAction(Request $request)
     {
-        if (!$content = $request->getContent())
-            throw new JsonHttpException(400, 'Bad Request');
+        $apiToken = $request->headers->get('x-api-key');
 
-        $data = json_decode($request->getContent(), true);
-        if (!isset($data['api_token']))
-            throw new JsonHttpException(400, 'Bad Request');
-
+        /* @var User $user */
         $user = $this->getDoctrine()
             ->getManager()
             ->getRepository(User::class)
-            ->findOneBy(['apiToken' => $data['api_token']]);
+            ->findOneBy(['apiToken' => $apiToken]);
         if (!$user)
-            throw new JsonHttpException(400, 'User not found');
+            throw new JsonHttpException(400, 'Authentication error');
 
         return ($this->json($user));
     }

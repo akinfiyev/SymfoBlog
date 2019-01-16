@@ -296,9 +296,9 @@ class Article implements \JsonSerializable
             'id' => $this->getId(),
             'title' => $this->getTitle(),
             'text' => $this->getText(),
+            'thumbnail' => $this->getThumbnail(),
             'createdAt' => $this->getCreatedAt(),
-            'isApproved' => $this->isApproved,
-            'author_id' => $this->getAuthor()->getId(),
+            'author_id' => $this->getAuthor()->getId()
         ];
     }
 

@@ -8,7 +8,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * @ORM\Entity(repositoryClass="App\Repository\CommentRepository")
  */
-class Comment
+class Comment implements \JsonSerializable
 {
     /**
      * @var int
@@ -120,5 +120,16 @@ class Comment
         $this->isDeleted = $isDeleted;
 
         return $this;
+    }
+
+    public function jsonSerialize()
+    {
+        return [
+            'id' => $this->getId(),
+            'text' => $this->getText(),
+            'author' => $this->getAuthor()->getId(),
+            'created_at' => $this->getCreatedAt(),
+            'article' => $this->getArticle()->getId()
+        ];
     }
 }
