@@ -2,9 +2,6 @@
 
 namespace App\Services;
 
-
-use App\Entity\User;
-
 class EmailService
 {
     /**

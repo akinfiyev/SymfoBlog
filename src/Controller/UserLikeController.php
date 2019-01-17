@@ -41,18 +41,4 @@ class UserLikeController extends AbstractController
             return $this->redirectToRoute('user_registration');
         }
     }
-
-    /**
-     * @Route("/like2/{id}", name="like_article2")
-     */
-    public function likeArticleAction2(Request $request, Article $article)
-    {
-        if($request->query->get('some_var_name')){
-            //make something curious, get some unbelieveable data
-            $arrData = ['output' => 'here the result which will appear in div'];
-            return new JsonResponse($arrData);
-        }
-
-        return $this->render('like.html.twig');
-    }
 }
