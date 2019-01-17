@@ -4,6 +4,6 @@
         {% endif %}
         {{ form_widget(form) }}
 <button class="btn btn-lg btn-success" type="submit">Sign in</button>
-{#<a href="{{ path('forget_password') }}"><div class="btn btn-lg btn-light float-right">Forget password?</div></a>#}
+<a href="{{ path('security_forget_password') }}"><div class="btn btn-lg btn-light float-right">Forget password?</div></a>
 <a href="{{ path('user_registration') }}"><div class="btn btn-lg btn-light w-100 mt-2">Registration</div></a>
 {{ form_end(form) }}

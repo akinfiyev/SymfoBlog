@@ -29,6 +29,7 @@ class User implements UserInterface, \JsonSerializable
      * @ORM\Column(type="string", length=180, unique=true)
      * @Assert\NotBlank()
      * @Assert\Email()
+     * @Assert\Email(groups={"forget_password"})
      */
     private $email;
 
@@ -47,6 +48,7 @@ class User implements UserInterface, \JsonSerializable
     /**
      * @var string Plain password
      * @Assert\NotBlank()
+     * @Assert\NotBlank(groups={"reset_password"})
      * @Assert\Length(
      *      min = 3,
      *      max = 50,
@@ -106,6 +108,13 @@ class User implements UserInterface, \JsonSerializable
      * @ORM\Column(type="string", unique=true)
      */
     private $apiToken;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $hash;
 
     public function __construct()
     {
@@ -346,6 +355,18 @@ class User implements UserInterface, \JsonSerializable
     public function setHasRequestBloggerRole(?bool $hasRequestBloggerRole): self
     {
         $this->hasRequestBloggerRole = $hasRequestBloggerRole;
+
+        return $this;
+    }
+
+    public function getHash(): ?string
+    {
+        return $this->hash;
+    }
+
+    public function setHash(?string $hash): self
+    {
+        $this->hash = $hash;
 
         return $this;
     }
