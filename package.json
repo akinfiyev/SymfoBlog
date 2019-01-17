@@ -16,5 +16,9 @@
         "dev": "encore dev",
         "watch": "encore dev --watch",
         "build": "encore production --progress"
+    },
+    "dependencies": {
+        "swagger-ui": "^3.20.5",
+        "swagger-ui-dist": "^3.20.5"
     }
 }
