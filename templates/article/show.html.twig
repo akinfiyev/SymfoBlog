@@ -32,13 +32,17 @@
                         {% endif %}
                         <i class="fa fa-comment"></i>
                     </a>
-                    <a class="btn btn-light text-primary" href="{{ path('like_article', {'id': article.id}) }}"
-                       role="button">
-                        {% if article.articleLikes|length > 0 %}
-                            {{ article.articleLikes|length }}
-                        {% endif %}
+                    <button class="ajax-like btn btn-light text-primary"
+                            role="button"
+                            data-link="{{ path('like_article', {'id': article.id}) }}"
+                            data-id="{{ article.id }}">
+                            <span id="likes-count-{{ article.id }}">
+                                {% if article.articleLikes|length > 0 %}
+                                    {{ article.articleLikes|length }}
+                                {% endif %}
+                            </span>
                         <i class="fa fa-heart"></i>
-                    </a>
+                    </button>
                 </div>
             </div>
         </div>
@@ -66,3 +70,9 @@
         </div>
     </div>
 {% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('js/ajax_like.js') }}"></script>
+{% endblock %}
+
