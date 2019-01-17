@@ -1,0 +1,14 @@
+nelmio_api_doc:
+    documentation:
+        info:
+            title: SymfoBlog API Doc
+            description: Blog using Symfony framework
+            version: 1.0.1
+        securityDefinitions:
+            ApiAuth:
+                type: apiKey
+                in: header
+                name: x-api-key
+    areas:
+        path_patterns:
+            - ^/api(?!/doc$)
