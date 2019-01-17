@@ -4,6 +4,7 @@ namespace App\Controller\Api;
 
 use App\Entity\User;
 use App\Exception\JsonHttpException;
+use Nelmio\ApiDocBundle\Annotation\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -11,6 +12,7 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 use Ramsey\Uuid\Uuid;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
+use Swagger\Annotations as SWG;
 
 class UserController extends AbstractController
 {
@@ -33,6 +35,28 @@ class UserController extends AbstractController
     /**
      * @Route("/api/user/registration", methods={"POST"}, name="api_user_registration")
      * @throws \Exception
+     *
+     * @SWG\Response(
+     *     response=200,
+     *     description="Returns user profile"
+     * )
+     * @SWG\Response(
+     *     response=400,
+     *     description="Invalid request"
+     * )
+     * @SWG\Parameter(
+     *     name="user",
+     *     in="body",
+     *     type="json",
+     *     description="User object used for user registration",
+     *     @SWG\Schema(
+     *            type="object",
+     *            @SWG\Property(property="username", type="string"),
+     *            @SWG\Property(property="email", type="string"),
+     *            @SWG\Property(property="plainPassword", type="string"),
+     *         )
+     * )
+     * @SWG\Tag(name="User API")
      */
     public function registrationUserAction(Request $request)
     {
@@ -57,6 +81,27 @@ class UserController extends AbstractController
     /**
      * @Route("/api/user/login", methods={"POST"}, name="api_user_login")
      * @throws \Exception
+     *
+     * @SWG\Response(
+     *     response=200,
+     *     description="Returns user profile"
+     * )
+     * @SWG\Response(
+     *     response=400,
+     *     description="Invalid request or credentials"
+     * )
+     * @SWG\Parameter(
+     *     name="user",
+     *     in="body",
+     *     type="json",
+     *     description="User object used for user authentication",
+     *     @SWG\Schema(
+     *            type="object",
+     *            @SWG\Property(property="email", type="string"),
+     *            @SWG\Property(property="plainPassword", type="string"),
+     *         )
+     * )
+     * @SWG\Tag(name="User API")
      */
     public function loginUserAction(Request $request, UserPasswordEncoderInterface $passwordEncoder)
     {
@@ -89,6 +134,18 @@ class UserController extends AbstractController
     /**
      * @Route("/api/user/profile", methods={"GET"}, name="api_user_profile")
      * @throws \Exception
+     *
+     * @SWG\Response(
+     *     response=200,
+     *     description="Returns user profile"
+     * )
+     * @SWG\Response(
+     *     response=400,
+     *     description="Invalid api token"
+     * )
+     * @SWG\Tag(name="User API")
+     *
+     * @Security(name="ApiAuth")
      */
     public function showProfileAction(Request $request)
     {

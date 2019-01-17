@@ -10,6 +10,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\SerializerInterface;
+use Swagger\Annotations as SWG;
+use Nelmio\ApiDocBundle\Annotation\Security;
 
 class LikeController extends AbstractController
 {
@@ -25,6 +27,24 @@ class LikeController extends AbstractController
 
     /**
      * @Route("/api/like/{article}", methods={"GET"}, name="api_like")
+     *
+     * @SWG\Response(
+     *     response=200,
+     *     description="Returns like object. If ID is not null like has been set. If ID is null like has been unset"
+     * )
+     * @SWG\Response(
+     *     response=400,
+     *     description="Invalid api token"
+     * )
+     * @SWG\Parameter(
+     *     name="article",
+     *     in="path",
+     *     type="integer",
+     *     description="Article ID which like need to be set"
+     * )
+     * @SWG\Tag(name="Like API")
+     *
+     * @Security(name="ApiAuth")
      */
     public function likeAction(Request $request, Article $article)
     {

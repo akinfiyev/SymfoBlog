@@ -17,6 +17,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
+use Swagger\Annotations as SWG;
+use Nelmio\ApiDocBundle\Annotation\Security;
 
 class CommentController extends AbstractController
 {
@@ -39,6 +41,34 @@ class CommentController extends AbstractController
     /**
      * @Route("/api/comment/{article}/add", methods={"POST"}, name="api_comment_add")
      * @throws \Exception
+     *
+     * @SWG\Response(
+     *     response=200,
+     *     description="Returns created comment object"
+     * )
+     * @SWG\Response(
+     *     response=400,
+     *     description="Invalid api token"
+     * )
+     * @SWG\Parameter(
+     *     name="article",
+     *     in="path",
+     *     type="integer",
+     *     description="Article ID which in comment will be add"
+     * )
+     * @SWG\Parameter(
+     *     name="comment",
+     *     in="body",
+     *     type="json",
+     *     description="Comment object used for create comment",
+     *     @SWG\Schema(
+     *            type="object",
+     *            @SWG\Property(property="text", type="string"),
+     *         )
+     * )
+     * @SWG\Tag(name="Comment API")
+     *
+     * @Security(name="ApiAuth")
      */
     public function addCommentAction(Request $request, Article $article)
     {

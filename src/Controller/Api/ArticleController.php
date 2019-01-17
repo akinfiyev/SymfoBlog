@@ -3,11 +3,13 @@
 namespace App\Controller\Api;
 
 use App\Entity\Article;
+use App\Exception\JsonHttpException;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\SerializerInterface;
+use Swagger\Annotations as SWG;
 
 class ArticleController extends AbstractController
 {
@@ -23,6 +25,22 @@ class ArticleController extends AbstractController
 
     /**
      * @Route("/api/articles/{page}", methods={"GET"}, name="api_articles")
+     *
+     * @SWG\Response(
+     *     response=200,
+     *     description="Returns article object array"
+     * )
+     * @SWG\Response(
+     *     response=404,
+     *     description="Page not found"
+     * )
+     * @SWG\Parameter(
+     *     name="page",
+     *     in="path",
+     *     type="integer",
+     *     description="Articles page"
+     * )
+     * @SWG\Tag(name="Article API")
      */
     public function showArticlesAction(Request $request, PaginatorInterface $paginator, string $page)
     {
@@ -44,6 +62,22 @@ class ArticleController extends AbstractController
 
     /**
      * @Route("/api/articles/{id}/show", methods={"GET"}, name="api_articles_show")
+     *
+     * @SWG\Response(
+     *     response=200,
+     *     description="Returns article object"
+     * )
+     * @SWG\Response(
+     *     response=404,
+     *     description="Article not found"
+     * )
+     * @SWG\Parameter(
+     *     name="id",
+     *     in="path",
+     *     type="integer",
+     *     description="Article ID"
+     * )
+     * @SWG\Tag(name="Article API")
      */
     public function showArticleByIdAction(Article $article)
     {
