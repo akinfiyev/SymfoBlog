@@ -55,8 +55,6 @@ class SecurityController extends AbstractController
 
     /**
      * @Route("/forget_password", name="security_forget_password")
-     *
-     * @throws \Exception
      */
     public function forgetPasswordAction(Request $request, EmailService $emailService)
     {
@@ -106,8 +104,6 @@ class SecurityController extends AbstractController
 
     /**
      * @Route("/reset_password/{hash}", name="security_reset_password")
-     *
-     * @throws \Exception
      */
     public function resetPasswordAction(Request $request, string $hash)
     {
