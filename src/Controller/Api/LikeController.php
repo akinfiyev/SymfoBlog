@@ -6,6 +6,7 @@ use App\Entity\Article;
 use App\Entity\User;
 use App\Entity\UserLike;
 use App\Exception\JsonHttpException;
+use App\Security\ApiAuthenticator;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -49,7 +50,7 @@ class LikeController extends AbstractController
     public function likeAction(Request $request, Article $article)
     {
         $em = $this->getDoctrine()->getManager();
-        $apiToken = $request->headers->get('x-api-key');
+        $apiToken = $request->headers->get(ApiAuthenticator::X_API_KEY);
 
         /** @var User $user */
         $user = $em->getRepository(User::class)
