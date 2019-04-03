@@ -24,9 +24,7 @@
                         {% if article.comments|length > 0 %}
                             {% set commentCount = 0 %}
                             {% for comment in article.comments %}
-                                {% if comment.isDeleted == false %}
-                                    {% set commentCount = commentCount + 1 %}
-                                {% endif %}
+                                {% set commentCount = commentCount + 1 %}
                             {% endfor %}
                             {{ commentCount }}
                         {% endif %}

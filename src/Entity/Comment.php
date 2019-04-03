@@ -3,10 +3,12 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation\SoftDeleteable;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\CommentRepository")
+ * @SoftDeleteable(fieldName="deletedAt", timeAware=false)
  */
 class Comment implements \JsonSerializable
 {
@@ -53,9 +55,9 @@ class Comment implements \JsonSerializable
 
     /**
      * @var bool
-     * @ORM\Column(type="boolean")
+     * @ORM\Column(type="datetime", nullable=true)
      */
-    private $isDeleted;
+    private $deletedAt;
 
     public function getId(): ?int
     {
@@ -110,14 +112,14 @@ class Comment implements \JsonSerializable
         return $this;
     }
 
-    public function getIsDeleted(): ?bool
+    public function getDeletedAt()
     {
-        return $this->isDeleted;
+        return $this->deletedAt;
     }
 
-    public function setIsDeleted(bool $isDeleted): self
+    public function setDeletedAt($deletedAt): self
     {
-        $this->isDeleted = $isDeleted;
+        $this->deletedAt = $deletedAt;
 
         return $this;
     }

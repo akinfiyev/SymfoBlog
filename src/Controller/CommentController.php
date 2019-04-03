@@ -19,8 +19,7 @@ class CommentController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $comment->setAuthor($this->getUser())
                 ->setArticle($article)
-                ->setCreatedAt(new \DateTime())
-                ->setIsDeleted(false);
+                ->setCreatedAt(new \DateTime());
             $em = $this->getDoctrine()->getManager();
             $em->persist($comment);
             $em->flush();
@@ -30,7 +29,6 @@ class CommentController extends AbstractController
             ->getRepository(Comment::class)
             ->createQueryBuilder('comment')
             ->where('comment.article = ' . $article->getId())
-            ->andWhere('comment.isDeleted = false')
             ->orderBy('comment.id', 'DESC')
             ->getQuery();
         $comments = $paginator->paginate(

@@ -6,10 +6,11 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use Gedmo\Mapping\Annotation\SoftDeleteable;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\ArticleRepository")
- * @ORM\EntityListeners({"App\EntityListener\ArticleListener"})
+ * @SoftDeleteable(fieldName="deletedAt", timeAware=false)
  */
 class Article implements \JsonSerializable
 {
@@ -94,9 +95,9 @@ class Article implements \JsonSerializable
     private $thumbnail;
 
     /**
-     * @ORM\Column(type="boolean")
+     * @ORM\Column(type="datetime", nullable=true)
      */
-    private $isDeleted;
+    private $deletedAt;
 
     public function __construct()
     {
@@ -281,7 +282,8 @@ class Article implements \JsonSerializable
     }
 
     /**
-     * @param string $thumbnail
+     * @param string|null $thumbnail
+     * @return Article
      */
     public function setThumbnail(?string $thumbnail): self
     {
@@ -302,14 +304,14 @@ class Article implements \JsonSerializable
         ];
     }
 
-    public function getIsDeleted(): ?bool
+    public function getDeletedAt()
     {
-        return $this->isDeleted;
+        return $this->deletedAt;
     }
 
-    public function setIsDeleted(bool $isDeleted): self
+    public function setDeletedAt($deletedAt): self
     {
-        $this->isDeleted = $isDeleted;
+        $this->deletedAt = $deletedAt;
 
         return $this;
     }

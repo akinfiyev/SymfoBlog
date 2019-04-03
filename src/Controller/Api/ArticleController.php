@@ -48,7 +48,6 @@ class ArticleController extends AbstractController
             ->getRepository(Article::class)
             ->createQueryBuilder('article')
             ->where('article.isApproved = true')
-            ->andWhere('article.isDeleted = false')
             ->orderBy('article.id', 'DESC')
             ->getQuery();
         $articles = $paginator->paginate(

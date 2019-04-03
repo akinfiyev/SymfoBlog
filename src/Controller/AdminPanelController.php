@@ -144,7 +144,6 @@ class AdminPanelController extends AbstractController
         $query = $this->getDoctrine()
             ->getRepository(Article::class)
             ->createQueryBuilder('article')
-            ->where('article.isDeleted = false')
             ->orderBy('article.id', 'DESC')
             ->getQuery();
         $articles = $paginator->paginate(
@@ -165,7 +164,6 @@ class AdminPanelController extends AbstractController
         $query = $this->getDoctrine()
             ->getRepository(Article::class)
             ->createQueryBuilder('article')
-            ->where('article.isDeleted = false')
             ->andWhere('article.isApproved = false')
             ->orderBy('article.id', 'DESC')
             ->getQuery();
@@ -270,7 +268,7 @@ class AdminPanelController extends AbstractController
      */
     public function articleDeleteAction(Request $request, Article $article)
     {
-        $article->setIsDeleted(true);
+        $this->getDoctrine()->getManager()->remove($article);
         $this->getDoctrine()->getManager()->flush();
 
         return $this->redirect($request->headers->get('referer'));
@@ -284,7 +282,6 @@ class AdminPanelController extends AbstractController
         $query = $this->getDoctrine()
             ->getRepository(Comment::class)
             ->createQueryBuilder('comment')
-            ->where('comment.isDeleted = false')
             ->orderBy('comment.id', 'DESC')
             ->getQuery();
         $comments = $paginator->paginate(
@@ -302,7 +299,7 @@ class AdminPanelController extends AbstractController
      */
     public function commentsDeleteAction(Request $request, Comment $comment)
     {
-        $comment->setIsDeleted(true);
+        $this->getDoctrine()->getManager()->remove($comment);
         $this->getDoctrine()->getManager()->flush();
 
         return $this->redirect($request->headers->get('referer'));

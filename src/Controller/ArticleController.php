@@ -23,7 +23,6 @@ class ArticleController extends AbstractController
         $query = $this->getDoctrine()
             ->getRepository(Article::class)
             ->createQueryBuilder('article')
-            ->where('article.isDeleted = false')
             ->andWhere('article.isApproved = true')
             ->orderBy('article.id', 'DESC')
             ->getQuery();

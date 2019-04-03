@@ -95,8 +95,7 @@ class AppFixtures extends Fixture
                     $comment->setArticle($this->getReference('article_' . $i))
                         ->setText('Lorem ipsum comment dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.')
                         ->setCreatedAt(new \DateTime())
-                        ->setAuthor($this->getReference('user_' . random_int(0, 14)))
-                        ->setIsDeleted(false);
+                        ->setAuthor($this->getReference('user_' . random_int(0, 14)));
                     $manager->persist($comment);
                 }
             }
