@@ -40,7 +40,6 @@ class ArticleController extends AbstractController
 
     /**
      * @Route("/articles/add", name="articles_add")
-     * @throws \Exception
      */
     public function addAction(Request $request, UploaderService $uploaderService, ArticleService $articleService)
     {
