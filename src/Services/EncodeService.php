@@ -14,6 +14,11 @@ class EncodeService
         $this->encoder = $encoder;
     }
 
+    /**
+     * @param String|null $plainPassword
+     * @param User $user
+     * @return string|null
+     */
     public function encodeUserPassword(?String $plainPassword, User $user)
     {
         if (!empty($plainPassword)) {

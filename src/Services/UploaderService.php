@@ -21,6 +21,10 @@ class UploaderService
         $this->targetDirectory = $targetDirectory;
     }
 
+    /**
+     * @param UploadedFile $file
+     * @return string
+     */
     public function upload(UploadedFile $file)
     {
         $fileName = md5(uniqid()).'.'.$file->guessExtension();
