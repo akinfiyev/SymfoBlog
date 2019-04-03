@@ -11,9 +11,6 @@ use Symfony\Component\HttpFoundation\Request;
 
 class CommentController extends AbstractController
 {
-    /**
-     * @throws \Exception
-     */
     public function listCommentsAction(Request $request, Article $article, PaginatorInterface $paginator)
     {
         $comment = new Comment();

@@ -40,7 +40,6 @@ class CommentController extends AbstractController
 
     /**
      * @Route("/api/comment/{article}/add", methods={"POST"}, name="api_comment_add")
-     * @throws \Exception
      *
      * @SWG\Response(
      *     response=200,
