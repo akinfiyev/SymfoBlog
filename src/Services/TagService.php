@@ -4,6 +4,10 @@ namespace App\Services;
 
 class TagService
 {
+    /**
+     * @param array $tags
+     * @return array
+     */
     public function createTagNamesArray(array $tags)
     {
         $tagNames = [];
