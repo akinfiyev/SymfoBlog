@@ -18,8 +18,7 @@ class CommentController extends AbstractController
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $comment->setAuthor($this->getUser())
-                ->setArticle($article)
-                ->setCreatedAt(new \DateTime());
+                ->setArticle($article);
             $em = $this->getDoctrine()->getManager();
             $em->persist($comment);
             $em->flush();

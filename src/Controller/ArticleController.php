@@ -50,7 +50,6 @@ class ArticleController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $em = $this->getDoctrine()->getManager();
             $article->setAuthor($this->getUser())
-                ->setCreatedAt(new \DateTime())
                 ->setIsApproved(false);
             if (!empty($article->getThumbnail())) {
                 $thumbnail = $uploaderService->upload(new UploadedFile($article->getThumbnail(), 'thumbnail'));

@@ -86,8 +86,7 @@ class CommentController extends AbstractController
         /* @var Comment $comment */
         $comment = $this->serializer->deserialize($request->getContent(), Comment::class, 'json');
         $comment->setAuthor($user)
-            ->setArticle($article)
-            ->setCreatedAt(new \DateTime());
+            ->setArticle($article);
 
         $errors = $this->validator->validate($comment);
         if (count($errors))

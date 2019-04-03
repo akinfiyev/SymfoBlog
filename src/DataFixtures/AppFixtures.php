@@ -77,7 +77,6 @@ class AppFixtures extends Fixture
             $article = new Article();
             $article->setTitle('Lorem article ' . $i)
                 ->setText('Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.')
-                ->setCreatedAt(new \DateTime())
                 ->setAuthor($this->getReference('user_blogger'))
                 ->setThumbnail('fixtures/thumbnail-' . ($i+1) . '.jpg')
                 ->setIsApproved($i % 2 == 0 ? true : false);
@@ -94,7 +93,6 @@ class AppFixtures extends Fixture
                     $comment = new Comment();
                     $comment->setArticle($this->getReference('article_' . $i))
                         ->setText('Lorem ipsum comment dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.')
-                        ->setCreatedAt(new \DateTime())
                         ->setAuthor($this->getReference('user_' . random_int(0, 14)));
                     $manager->persist($comment);
                 }
