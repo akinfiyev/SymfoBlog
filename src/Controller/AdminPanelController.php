@@ -181,7 +181,6 @@ class AdminPanelController extends AbstractController
 
     /**
      * @Route("/admin/articles/add", methods={"GET","POST"}, name="admin_panel_articles_add")
-     * @throws \Exception
      */
     public function articleAddAction(Request $request, UploaderService $uploaderService, ArticleService $articleService)
     {
