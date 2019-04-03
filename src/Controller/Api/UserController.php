@@ -34,7 +34,6 @@ class UserController extends AbstractController
 
     /**
      * @Route("/api/user/registration", methods={"POST"}, name="api_user_registration")
-     * @throws \Exception
      *
      * @SWG\Response(
      *     response=200,
@@ -80,7 +79,6 @@ class UserController extends AbstractController
 
     /**
      * @Route("/api/user/login", methods={"POST"}, name="api_user_login")
-     * @throws \Exception
      *
      * @SWG\Response(
      *     response=200,
@@ -133,7 +131,6 @@ class UserController extends AbstractController
 
     /**
      * @Route("/api/user/profile", methods={"GET"}, name="api_user_profile")
-     * @throws \Exception
      *
      * @SWG\Response(
      *     response=200,
