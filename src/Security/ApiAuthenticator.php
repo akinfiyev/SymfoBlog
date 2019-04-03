@@ -17,6 +17,8 @@ class ApiAuthenticator extends AbstractGuardAuthenticator
 {
     private $em;
 
+    const X_API_KEY = 'x-api-key';
+
     public function __construct(EntityManagerInterface $em)
     {
         $this->em = $em;
