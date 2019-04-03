@@ -18,10 +18,7 @@ class TagController extends AbstractController
     {
         $query = $this->getDoctrine()
             ->getRepository(Tag::class)
-            ->createQueryBuilder('tag')
-            ->where('tag.name = \'' . $tag->getName() . '\'')
-            ->orderBy('tag.article', 'DESC')
-            ->getQuery();
+            ->findAllByName($tag->getName());
         $tags = $paginator->paginate(
             $query,
             $request->query->getInt('page', 1),

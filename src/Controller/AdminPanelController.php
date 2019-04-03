@@ -52,10 +52,7 @@ class AdminPanelController extends AbstractController
     {
         $query = $this->getDoctrine()
             ->getRepository(User::class)
-            ->createQueryBuilder('user')
-            ->where('user.hasRequestBloggerRole = true')
-            ->orderBy('user.id', 'ASC')
-            ->getQuery();
+            ->findAllWithBloggerRequest();
         $users = $paginator->paginate(
             $query,
             $request->query->getInt('page', 1),
@@ -163,10 +160,7 @@ class AdminPanelController extends AbstractController
     {
         $query = $this->getDoctrine()
             ->getRepository(Article::class)
-            ->createQueryBuilder('article')
-            ->andWhere('article.isApproved = false')
-            ->orderBy('article.id', 'DESC')
-            ->getQuery();
+            ->findAllUnapprovedArticles();
         $articles = $paginator->paginate(
             $query,
             $request->query->getInt('page', 1),

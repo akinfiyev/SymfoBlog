@@ -26,10 +26,7 @@ class CommentController extends AbstractController
 
         $query = $this->getDoctrine()
             ->getRepository(Comment::class)
-            ->createQueryBuilder('comment')
-            ->where('comment.article = ' . $article->getId())
-            ->orderBy('comment.id', 'DESC')
-            ->getQuery();
+            ->findAllByArticleId($article->getId());
         $comments = $paginator->paginate(
             $query,
             $request->query->getInt('page', 1),

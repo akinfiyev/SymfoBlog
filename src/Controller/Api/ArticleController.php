@@ -46,10 +46,7 @@ class ArticleController extends AbstractController
     {
         $query = $this->getDoctrine()
             ->getRepository(Article::class)
-            ->createQueryBuilder('article')
-            ->where('article.isApproved = true')
-            ->orderBy('article.id', 'DESC')
-            ->getQuery();
+            ->findAllApprovedArticles();
         $articles = $paginator->paginate(
             $query,
             $request->query->getInt('page', $page),
