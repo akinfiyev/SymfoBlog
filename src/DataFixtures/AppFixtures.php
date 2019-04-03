@@ -21,9 +21,6 @@ class AppFixtures extends Fixture
         $this->passwordEncoder = $passwordEncoder;
     }
 
-    /**
-     * @throws \Exception
-     */
     public function load(ObjectManager $manager)
     {
         $this->loadUsers($manager);
@@ -74,9 +71,6 @@ class AppFixtures extends Fixture
         }
     }
 
-    /**
-     * @throws \Exception
-     */
     public function loadArticles(ObjectManager $manager)
     {
         for ($i = 0; $i < 15; $i++) {
@@ -92,9 +86,6 @@ class AppFixtures extends Fixture
         }
     }
 
-    /**
-     * @throws \Exception
-     */
     public function loadComments(ObjectManager $manager)
     {
         for ($i = 0; $i < 15; $i++) {
@@ -112,9 +103,6 @@ class AppFixtures extends Fixture
         }
     }
 
-    /**
-     * @throws \Exception
-     */
     public function loadLikes(ObjectManager $manager)
     {
         for ($i = 0; $i < 15; $i++) {
@@ -129,9 +117,6 @@ class AppFixtures extends Fixture
         }
     }
 
-    /**
-     * @throws \Exception
-     */
     public function loadTags(ObjectManager $manager)
     {
         $tagsNames = ['футбол', 'symfony', 'blog', 'admin', 'doctor-mom', 'homework', 'server', 'localhost', 'bitcoin', 'eKreative', 'Lektorium', 'friend', 'work', 'hello', 'burger', 'white paper', 'book', 'deal', 'php'];
