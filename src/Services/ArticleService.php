@@ -9,6 +9,11 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class ArticleService
 {
+    /**
+     * @param string $plainTags
+     * @param Article $article
+     * @return array
+     */
     public function parseTags(string $plainTags, Article $article)
     {
         $plainTags = trim($plainTags);
