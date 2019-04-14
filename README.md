@@ -6,7 +6,7 @@ My first project using Symfony framework
 ### Built With
 
 * [Composer](https://getcomposer.org/) - Dependency Manager for PHP
-* [yarn](https://yarnpkg.com/en/) - Dependency Manager for fron-end
+* [yarn](https://yarnpkg.com/en/) - Dependency Manager for front-end
 
 ### Deploy
 A step by step series that tell you how to get a development env running
